@@ -18,9 +18,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'username', 'email', 'password', 'name', 'avatar', 'bio', 'settings'
     ];
 
     /**
@@ -43,6 +41,41 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'settings' => 'array',
         ];
+    }
+
+
+    public function posts() {
+        return $this->hasMany(Post::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function reactions() {
+        return $this->hasMany(Reaction::class);
+    }
+
+    public function bookmarks() {
+        return $this->hasMany(Bookmark::class);
+    }
+
+    public function followers() {
+        return $this->belongsToMany(User::class, 'follows', 'followee_id', 'follower_id')->withTimestamps();
+    }
+
+    public function following() {
+        return $this->belongsToMany(User::class, 'follows', 'follower_id', 'followee_id')->withTimestamps();
+    }
+
+    public function notifications() {
+        return $this->hasMany(Notification::class);
+    }
+
+    // SCOPES
+    public function scopeActive($query) {
+        return $query->whereNotNull('email_verified_at');
     }
 }
