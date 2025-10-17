@@ -1,0 +1,23 @@
+<div class="post-card">
+    <div class="post-header">
+        <!-- <img class="avatar" [src]="userAvatar" alt="{{ username }} Avatar"> -->
+        <img class="avatar" src="default.jpg" alt="{{ username }} Avatar">
+        <div class="user-info">
+            <h2 class="username">{{ username }}</h2>
+            <span class="date">{{ date | date:'short' }}</span>
+        </div>
+    </div>
+
+    <div class="post-content">
+        <p>{{ content }}</p>
+    </div>
+
+    <div class="post-tags" *ngIf="tags?.length">
+        <span class="tag" *ngFor="let tag of tags">#{{ tag }}</span>
+    </div>
+
+    <div class="post-footer">
+        <span class="likes">❤️ {{ likes }}</span>
+        <span class="comments">💬 {{ comments }}</span>
+    </div>
+</div>
