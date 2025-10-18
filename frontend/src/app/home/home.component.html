@@ -1,14 +1,7 @@
-<h1>Bienvenido a la red social</h1>
-<p>Has iniciado sesión correctamente 🎉</p>
-<button (click)="logout()">Cerrar sesión</button>
-<div *ngFor="let post of feed">
-    <app-feed-item 
-        [userAvatar]="post.user.avatar" 
-        [username]="post.user.username" 
-        [content]="post.content" 
-        [date]="post.created_at" 
-        [likes]="post.likes_count" 
-        [comments]="post.comments_count" 
-        [tags]="post.tags" 
-    />
-</div>
+<section>
+    <app-sidebar></app-sidebar>
+    <div class="post">
+        <app-feed-item *ngFor="let post of feed" [userAvatar]="post.user.avatar" [username]="post.user.username" [content]="post.content"
+            [date]="post.created_at" [likes]="post.likes_count" [comments]="post.comments_count" [tags]="post.tags" />
+    </div>
+</section>

@@ -1,19 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { FeedService } from '../services/feed.service';
 import { FeedItemComponent } from "../components/feed-item/feed-item.component";
 import { NgFor } from '@angular/common';
+import { SidebarComponent } from '../components/sidebar/sidebar.component';
 
 @Component({
     selector: 'app-home',
-    imports: [FeedItemComponent, NgFor],
+    imports: [FeedItemComponent, NgFor, SidebarComponent],
     templateUrl: './home.component.html',
-    styleUrl: './home.component.css'
+    styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
     feed: any[] = [];
-    constructor(private authService: AuthService, private router: Router, private feedService: FeedService) { }
+    nextPageUrl: string | null = null;
+    loading = false;
+
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private feedService: FeedService
+    ) { }
 
     ngOnInit() {
         this.getFeed();
@@ -29,15 +37,32 @@ export class HomeComponent {
         });
     }
 
-    getFeed() {
-        console.log('getFeed');
-        this.feedService.getFeed().subscribe({
+    getFeed(url?: string) {
+        if (this.loading) return;
+        this.loading = true;
+
+        this.feedService.getFeed(url).subscribe({
             next: (res) => {
-                console.log(res);
-                this.feed = Array.isArray(res.data) ? res.data : [res.data];
-                console.log(this.feed);
+                console.log(res)
+                const newItems = Array.isArray(res.data) ? res.data : [res.data];
+                this.feed = [...this.feed, ...newItems];
+                this.nextPageUrl = res.links?.next || null;
+                this.loading = false;
             },
-            error: (err) => console.error(err)
+            error: (err) => {
+                console.error(err);
+                this.loading = false;
+            }
         });
+    }
+
+    @HostListener('window:scroll', [])
+    onScroll(): void {
+        const bottomReached =
+            window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
+
+        if (bottomReached && this.nextPageUrl && !this.loading) {
+            this.getFeed(this.nextPageUrl);
+        }
     }
 }
