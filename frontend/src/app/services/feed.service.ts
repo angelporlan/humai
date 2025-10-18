@@ -11,8 +11,15 @@ export class FeedService {
 
   constructor(private http: HttpClient) { }
 
-  getFeed(): Observable<any> {
+  getFeed(url?: string): Observable<any> {
     const token = localStorage.getItem('token');
+    if (url) {
+      return this.http.get(`${url}`, {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        })
+      });
+    }
     return this.http.get(`${this.apiUrl}/feed`, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`
