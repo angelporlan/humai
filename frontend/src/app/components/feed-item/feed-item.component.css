@@ -1,10 +1,9 @@
 .post-card {
-    border: 1px solid #ddd;
     border-radius: 8px;
     padding: 16px;
     max-width: 500px;
     margin: 16px auto;
-    background-color: #fff;
+    background-color: var(--color-secondary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
 }
@@ -21,7 +20,6 @@
     border-radius: 50%;
     object-fit: cover;
     margin-right: 12px;
-    border: 1px solid #ccc;
 }
 
 .user-info .username {
@@ -46,8 +44,7 @@
 
 .tag {
     display: inline-block;
-    background-color: #f0f0f0;
-    color: #555;
+    color: #26f2c7;
     padding: 4px 8px;
     border-radius: 4px;
     margin-right: 4px;
