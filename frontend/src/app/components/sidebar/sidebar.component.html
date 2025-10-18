@@ -1,0 +1,25 @@
+<div class="box" [ngClass]="{ 'hidden-box': isSidebarHidden }">
+    <ul class="list-unstyled components" [ngClass]="{ 'hidden-ul': isSidebarHidden }">
+        <li [ngClass]="{ 'active': isActive('user') }" (click)="navigateTo('profile')">
+            <img src="icons/user.svg" alt="svg">
+            <span [ngClass]="{ 'hidden-span': isSidebarHidden }">{{ "SIDEBAR.PROFILE"}}</span>
+        </li>
+        <!-- <li [ngClass]="{ 'active': isActive('main') }" (click)="navigateTo('main')">
+            <img src="../../../icons/dashboard.svg" alt="svg">
+            <span [ngClass]="{ 'hidden-span': isSidebarHidden }">Main</span>
+        </li> -->
+        <li [ngClass]="{ 'active': isActive('houses') }" (click)="navigateTo('houses')">
+            <img src="icons/home.svg" alt="svg">
+            <span [ngClass]="{ 'hidden-span': isSidebarHidden }">{{ "SIDEBAR.HOUSES"}}</span>
+        </li>
+        <li [ngClass]="{ 'active': isActive('products') || isActive('product') }" (click)="navigateTo('products')">
+            <img src="icons/products.svg" alt="svg">
+            <span [ngClass]="{ 'hidden-span': isSidebarHidden }">{{ "SIDEBAR.PRODUCTS"}}</span>
+        </li>
+        <li [ngClass]="{ 'active': isActive('recipe') }" (click)="navigateTo('recipe')">
+            <img src="icons/sparkles.svg" alt="svg">
+            <span [ngClass]="{ 'hidden-span': isSidebarHidden }">{{ "SIDEBAR.RECIPE"}}</span>
+        </li>
+    </ul>
+    <img src="icons/arrow.svg" class="arrow" alt="arrow" [ngClass]="{ 'hidden-img': isSidebarHidden }" (click)="isSidebarHidden = !isSidebarHidden">
+</div>
