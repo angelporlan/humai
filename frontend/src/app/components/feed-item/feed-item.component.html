@@ -17,7 +17,13 @@
     </div>
 
     <div class="post-footer">
-        <span class="likes">❤️ {{ likes }}</span>
-        <span class="comments">💬 {{ comments }}</span>
+        <button class="action-button like-button">
+            <img src="icons/heart.svg" alt="heart">
+            <span class="count">{{ likes }}</span>
+        </button>
+        <button class="action-button comment-button">
+            <img src="icons/message.svg" alt="message">
+            <span class="count">{{ comments }}</span>
+        </button>
     </div>
 </div>

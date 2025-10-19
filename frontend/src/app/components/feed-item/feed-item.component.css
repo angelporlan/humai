@@ -1,7 +1,6 @@
 .post-card {
     border-radius: 8px;
     padding: 16px;
-    max-width: 500px;
     margin: 16px auto;
     background-color: var(--color-secondary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -45,7 +44,7 @@
 .tag {
     display: inline-block;
     color: #26f2c7;
-    padding: 4px 8px;
+    padding: 0px 8px;
     border-radius: 4px;
     margin-right: 4px;
     font-size: 0.85em;
@@ -53,10 +52,65 @@
 
 .post-footer {
     display: flex;
-    gap: 16px;
-    font-size: 0.9em;
-    color: #555;
+    gap: 24px;
     margin-top: 12px;
+    padding-top: 8px;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: var(--text-secondary, #71767b);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.action-button:hover {
+    background-color: rgba(114, 133, 10, 0.1);
+}
+
+.action-button img {
+    width: 16px;
+    height: 16px;
+    filter: invert(46%) sepia(8%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(86%);
+    transition: filter 0.2s;
+}
+
+.like-button img {
+    filter: invert(46%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(86%);
+}
+
+.like-button:hover img {
+    filter: invert(16%) sepia(99%) saturate(7404%) hue-rotate(0deg) brightness(95%) contrast(118%);
+}
+
+.like-button.liked img {
+    filter: invert(16%) sepia(99%) saturate(7404%) hue-rotate(0deg) brightness(95%) contrast(118%);
+}
+
+.like-button.liked:hover img {
+    filter: invert(40%) sepia(99%) saturate(7404%) hue-rotate(0deg) brightness(120%) contrast(118%);
+}
+
+.comment-button img {
+    filter: invert(46%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(86%);
+    transition: filter 0.2s;
+}
+
+.comment-button:hover img {
+    filter: invert(316%) sepia(99%) saturate(404%) hue-rotate(166deg) brightness(195%) contrast(138%);
+    transition: filter 0.2s;
+}
+.count {
+    font-size: 13px;
+    font-weight: 500;
+    margin-left: 2px;
 }
 
 .post-footer span {
