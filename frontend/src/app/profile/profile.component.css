@@ -1,0 +1,93 @@
+section {
+    max-width: 600px;
+    margin: 0 auto;
+    border-bottom: 1px solid #e1e8ed;
+}
+
+img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-top: 48px;
+}
+
+.info {
+    margin-top: 12px;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+    color: #f9fafb;
+}
+
+p {
+    margin: 4px 0;
+    color: #536471;
+    font-size: 15px;
+}
+
+p:first-of-type {
+    color: #536471;
+    font-weight: 400;
+}
+
+.bio {
+    margin-top: 12px;
+    color: #f9fafb;
+    line-height: 1.4;
+}
+
+.stats {
+    display: flex;
+    margin-top: 16px;
+    color: #536471;
+    font-size: 14px;
+}
+
+.stats div {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.stats span {
+    font-weight: 700;   
+    color: #f9fafb;
+    margin-right: 4px;
+}
+
+.follow-button {
+    margin-top: 16px;
+    background-color: var(--color-tertiary);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.follow-button:hover {
+    opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+    section {
+        padding: 12px;
+    }
+    
+    img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .cover-photo {
+        height: 150px;
+    }
+}
