@@ -55,6 +55,23 @@ class AuthController extends Controller
         ]);
     }
 
+    public function me(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
+    public function getInfoOfAUsername(Request $request)
+    {
+        $validated = $request->validate([
+            'username' => 'required|string|max:50',
+        ]);
+
+        $user = User::where('username', $validated['username'])->first();
+
+        return response()->json($user);
+    }
+    
+
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
