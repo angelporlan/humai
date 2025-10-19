@@ -12,6 +12,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/feed', [PostController::class, 'feed']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/getInfoOfAUsername', [AuthController::class, 'getInfoOfAUsername']);
 });
 
 // borrar para el commit
