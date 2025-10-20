@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/getInfoOfAUsername', [AuthController::class, 'getInfoOfAUsername']);
+    Route::get('/getPostsOfAUser', [PostController::class, 'getPostsOfAUser']);
 });
 
 // borrar para el commit
