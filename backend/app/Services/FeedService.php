@@ -24,15 +24,4 @@ class FeedService
 
         return $posts;
     }
-
-    public function feed()
-    {
-        $user = \App\Models\User::first();
-
-        $perPage = 10;
-
-        $posts = (new \App\Services\FeedService())->getFeed($user, $perPage);
-
-        return \App\Http\Resources\PostResource::collection($posts);
-    }
 }
