@@ -66,9 +66,27 @@ class AuthController extends Controller
             'username' => 'required|string|max:50',
         ]);
 
-        $user = User::where('username', $validated['username'])->first();
+        $user = User::where('username', $validated['username'])
+            ->withCount(['followers', 'following', 'posts'])
+            ->first();
 
-        return response()->json($user);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        return response()->json([
+            'id' => $user->id,
+            'username' => $user->username,
+            'email' => $user->email,
+            'name' => $user->name,
+            'avatar' => $user->avatar,
+            'bio' => $user->bio,
+            'followers_count' => $user->followers_count,
+            'following_count' => $user->following_count,
+            'posts_count' => $user->posts_count,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at
+        ]);
     }
     
 
