@@ -19,8 +19,17 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, { username, email, password, password_confirmation });
   }
 
+  me(): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    return this.http.get(`${this.apiUrl}/me`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
+
   logout(): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
       return this.http.post(`${this.apiUrl}/logout`,
       {},  
       {
@@ -31,7 +40,8 @@ export class AuthService {
     );
   }
 
-  isLoggedIn(token: string): boolean {
+  isLoggedIn(): boolean {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
     return !!token;
   }
 }
