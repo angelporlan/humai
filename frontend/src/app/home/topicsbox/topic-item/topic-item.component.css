@@ -1,0 +1,45 @@
+/* topic-item.component.css */
+article {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-left: 1px solid var(--color-tertiary);
+    margin: 12px 0;
+}
+
+article:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.topic {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--text-primary, #e7e9ea);
+}
+
+.post-number {
+    font-size: 13px;
+    color: var(--text-secondary, #71767b);
+    margin: 0;
+}
+
+/* Add a subtle border between items */
+:host:not(:last-child) article {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    article {
+        padding: 10px 12px;
+    }
+    
+    .topic {
+        font-size: 14px;
+    }
+    
+    .post-number {
+        font-size: 12px;
+    }
+}
