@@ -12,7 +12,7 @@ export class FeedService {
   constructor(private http: HttpClient) { }
 
   getFeed(url?: string): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
     if (url) {
       return this.http.get(`${url}`, {
         headers: new HttpHeaders({
@@ -21,6 +21,24 @@ export class FeedService {
       });
     }
     return this.http.get(`${this.apiUrl}/feed`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
+
+  getPostsOfAUser(username: string, url?: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    if (url) {
+      const body = { username };
+      return this.http.get(`${url}`, {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        }),
+        params: body
+      });
+    }
+    return this.http.get(`${this.apiUrl}/getPostsOfAUser?username=${username}`, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`
       })
