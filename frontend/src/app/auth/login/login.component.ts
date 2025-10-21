@@ -19,7 +19,11 @@ export class LoginComponent {
   login() {
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.token);
+        const dataRes = {
+          token: res.token,
+          username: res.user.username
+        }
+        localStorage.setItem('humai', JSON.stringify(dataRes));
         this.router.navigate(['/home']);
       },
       error: (err) => console.error(err)
