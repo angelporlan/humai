@@ -1,0 +1,22 @@
+section {
+    background-color: var(--color-secondary, #16181c);
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 16px;
+    color: var(--text-primary, #e7e9ea);
+    position: relative;
+    overflow: hidden;
+}
+
+span {
+    color: var(--color-tertiary, #e7e9ea);
+    font-weight: bold;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+span:hover {
+    text-decoration: underline;
+}
