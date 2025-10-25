@@ -3,7 +3,7 @@
         <!-- <img class="avatar" [src]="userAvatar" alt="{{ username }} Avatar"> -->
         <img class="avatar" src="default.jpg" alt="{{ username }} Avatar">
         <div class="user-info">
-            <h2 class="username">{{ username }}</h2>
+            <h2 class="username" (click)="navigateTo('profile/' + username)">{{ username }}</h2>
             <span class="date">{{ date | date:'short' }}</span>
         </div>
     </div>

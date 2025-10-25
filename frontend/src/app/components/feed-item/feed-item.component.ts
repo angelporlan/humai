@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-feed-item',
@@ -15,4 +16,10 @@ export class FeedItemComponent {
     @Input() likes: number = 0;
     @Input() comments: number = 0;
     @Input() tags: string[] = [];
+
+    constructor(private router: Router) { }
+
+    navigateTo(path: string): void {
+        this.router.navigate([path]);
+    }
 }
