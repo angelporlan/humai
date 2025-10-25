@@ -1,7 +1,16 @@
-img {
+.logo {
+    width: 50px;
+    height: 50px;
+    margin: 10px 10px;
+    margin-left: -2px;
+    cursor: pointer;
+}
+
+.icons {
     width: 24px;
     height: 24px;
     margin: 10px 10px;
+    filter: brightness(0) invert(1);
 }
 
 span {
@@ -53,11 +62,12 @@ li {
 }
 
 li:hover {
-    background-color: var(--navbar-line-color);
+    background-color: var(--color-octonary);
+    opacity: 0.9;   
 }
 
 .active {
-    background-color: var(--navbar-line-color);
+    background-color: var(--color-octonary);
     border-radius: 10px;
 }
 
@@ -72,7 +82,7 @@ li:hover {
     color: white;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1231px) {
     
     .hidden-box {
         width: 20px;
@@ -84,7 +94,7 @@ li:hover {
     }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1230px) {
     span {
         display: block;
     }
@@ -115,6 +125,48 @@ li:hover {
     } */
 
     .hidden-span {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .box {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: auto;
+        padding: 8px 0;
+        background: var(--color-primary);
+        border-top: 1px solid var(--color-secondary);
+        z-index: 100;
+    }
+
+    ul {
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        flex-direction: column;
+        margin: 0;
+        padding: 4px 8px;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    .icons {
+        margin: 0;
+        width: 24px;
+        height: 24px;
+    }
+
+    span {
         display: none;
     }
 }
