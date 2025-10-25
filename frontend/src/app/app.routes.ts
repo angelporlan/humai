@@ -16,8 +16,19 @@ export const routes: Routes = [
                 loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
             },
             {
-                path: 'profile',
-                loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
+                path: 'profile/:username',
+                loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent),
+                children: [
+                    {
+                        path: '',
+                        redirectTo: 'posts',
+                        pathMatch: 'full'
+                    },
+                    {
+                        path: 'posts',
+                        loadComponent: () => import('./profile/posts/posts.component').then(m => m.PostsComponent)
+                    }
+                ]
             }
         ]
     },
@@ -26,23 +37,3 @@ export const routes: Routes = [
         loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
     },
 ];
-
-// export const routes: Routes = [
-//     {
-//         path: '',
-//         redirectTo: 'home',
-//         pathMatch: 'full'
-//     },
-//     {
-//         path: 'auth',
-//         loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-//     },
-//     {
-//         path: 'home',
-//         loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
-//     },
-//     {
-//         path: 'profile',
-//         loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
-//     }
-// ];
