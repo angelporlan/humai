@@ -1,25 +1,38 @@
-<div class="profile-header">
-    <div class="profile-picture">
-        <img [src]="'default.jpg'" [alt]="name || 'Usuario'">
-    </div>
-</div>
-
-<section>
-    <div class="info">
-        <h2>{{ name || 'Nombre de usuario' }}</h2>
-        <p>{{'@' + username }}</p>
-        
-        <p class="bio">{{ bio || 'No hay biografía disponible' }}</p>
-        
-        <div class="stats">
-            <div>
-                <span>1,234</span> Siguiendo
-            </div>
-            <div>
-                <span>5.6K</span> Seguidores
-            </div>
+<div class="profile-container">
+    <section>
+        <div class="profile-picture">
+            <img [src]="'default.jpg'" [alt]="name || 'Usuario'">
         </div>
-        
-        <button class="follow-button">Seguir</button>
-    </div>
-</section>
+        <div class="profile-info">
+            <h2>{{ name || 'Nombre de usuario' }}</h2>
+            <p class="username">{{'@' + username }}</p>
+            <p class="bio">{{ bio || 'No hay biografía disponible' }}</p>
+            
+            <div class="stats">
+                <div>
+                    <span class="count">{{ posts_count || 0 }}</span>
+                    <span>Publicaciones</span>
+                </div>
+                <div>
+                    <span class="count">{{ followers_count || 0 }}</span>
+                    <span>Seguidores</span>
+                </div>
+                <div>
+                    <span class="count">{{ following_count || 0 }}</span>
+                    <span>Siguiendo</span>
+                </div>
+            </div>
+            
+            <button class="follow-button">Seguir</button>
+        </div>
+        <div class="tablist">
+            <button class="toggle-button toggle-active">Publicaciones</button>
+            <button class="toggle-button">Gustados</button>
+            <button class="toggle-button">Comentarios</button>
+        </div>
+    </section>
+
+    <section class="profile-content">
+        <router-outlet></router-outlet>
+    </section>
+</div>

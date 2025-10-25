@@ -1,7 +1,6 @@
 section {
     max-width: 600px;
     margin: 0 auto;
-    border-bottom: 1px solid #e1e8ed;
 }
 
 img {
@@ -75,6 +74,33 @@ p:first-of-type {
 
 .follow-button:hover {
     opacity: 0.8;
+}
+
+.tablist {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.tablist button {
+    background-color: transparent;
+    border: none;
+    color: #536471;
+    font-size: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: 100%;
+    border-bottom: 1px solid #e1e8ed;
+    padding-bottom: 8px;
+}
+
+.tablist button:hover {
+    opacity: 0.8;
+}
+
+.tablist button.toggle-active {
+    border-bottom: 2px solid var(--color-tertiary);
 }
 
 @media (max-width: 600px) {

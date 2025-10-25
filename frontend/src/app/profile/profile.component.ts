@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
@@ -15,9 +15,10 @@ export class ProfileComponent {
   avatar: string = '';
   name: string = '';
   bio: string = '';
-  // followers_count: number = 0;
-  // following_count: number = 0;
-  // posts_count: number = 0;
+  followers_count: number = 0;
+  following_count: number = 0;
+  posts_count: number = 0;
+  posts: any[] = [];
 
   constructor(private route: ActivatedRoute, private profileService: ProfileService) { }
 
@@ -32,6 +33,10 @@ export class ProfileComponent {
       this.avatar = response.avatar;
       this.name = response.name;
       this.bio = response.bio;
+      this.followers_count = response.followers_count;
+      this.following_count = response.following_count;
+      this.posts_count = response.posts_count;
     });
   }
+
 }
