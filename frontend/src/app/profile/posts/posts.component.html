@@ -1,0 +1,27 @@
+<div class="posts-container">
+  <ng-container *ngIf="posts.length > 0; else noPosts">
+    <app-feed-item
+      *ngFor="let post of posts"
+      [userAvatar]="post.user?.avatar || 'default.jpg'"
+      [username]="post.user?.username || ''"
+      [content]="post.content"
+      [date]="post.created_at"
+      [likes]="post.likes_count || 0"
+      [comments]="post.comments_count || 0"
+      [tags]="post.tags || []"
+    ></app-feed-item>
+    
+    <div *ngIf="loading" class="loading">
+      <p>Cargando más publicaciones...</p>
+    </div>
+    <div *ngIf="nextPageUrl" class="load-more">
+      <button (click)="getPosts(nextPageUrl)">Cargar más</button>
+    </div>
+  </ng-container>
+  
+  <ng-template #noPosts>
+    <div class="no-posts">
+      <p>No hay publicaciones para mostrar</p>
+    </div>
+  </ng-template>
+</div>
