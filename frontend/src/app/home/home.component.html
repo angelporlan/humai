@@ -1,7 +1,5 @@
-<section>
-    <app-sidebar></app-sidebar>
-    <div class="post">
-        <app-feed-item *ngFor="let post of feed" [userAvatar]="post.user.avatar" [username]="post.user.username" [content]="post.content"
-            [date]="post.created_at" [likes]="post.likes_count" [comments]="post.comments_count" [tags]="post.tags" />
-    </div>
-</section>
+<h2>Inicio</h2>
+<app-sharebox></app-sharebox>
+<app-feed-item *ngFor="let post of feed" [userAvatar]="post.user.avatar" [username]="post.user.username"
+    [content]="post.content" [date]="post.created_at" [likes]="post.likes_count" [comments]="post.comments_count"
+    [tags]="post.tags" />

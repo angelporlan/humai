@@ -4,11 +4,11 @@ import { Router } from '@angular/router';
 import { FeedService } from '../services/feed.service';
 import { FeedItemComponent } from "../components/feed-item/feed-item.component";
 import { NgFor } from '@angular/common';
-import { SidebarComponent } from '../components/sidebar/sidebar.component';
+import { ShareboxComponent } from './sharebox/sharebox.component';
 
 @Component({
     selector: 'app-home',
-    imports: [FeedItemComponent, NgFor, SidebarComponent],
+    imports: [FeedItemComponent, NgFor, ShareboxComponent],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
@@ -30,7 +30,7 @@ export class HomeComponent {
     logout() {
         this.authService.logout().subscribe({
             next: () => {
-                localStorage.removeItem('token');
+                localStorage.removeItem('humai');
                 this.router.navigate(['/auth/login']);
             },
             error: (err) => console.error(err)

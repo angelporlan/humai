@@ -1,7 +1,4 @@
-section {
-    display: flex;
-}
-
-.post {
-    display: block;
+h2 {
+    margin-top: 30px;
+    margin-bottom: 10px;
 }
