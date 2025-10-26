@@ -15,8 +15,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/getInfoOfAUsername', [AuthController::class, 'getInfoOfAUsername']);
     Route::get('/getPostsOfAUser', [PostController::class, 'getPostsOfAUser']);
+    Route::get('/getPostsReactedOfAUser', [PostController::class, 'getPostsReactedOfAUser']);
 });
 
-// borrar para el commit
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
