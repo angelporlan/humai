@@ -18,7 +18,7 @@ class ReactionFactory extends Factory
      */
     public function definition(): array
     {
-        $types = ['like','love','haha','wow','sad','angry'];
+        $types = ['like','love','haha','wow','sad','angry', 'beer', 'celebrate'];
 
         return [
             'user_id' => \App\Models\User::factory(),
