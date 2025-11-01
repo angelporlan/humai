@@ -27,6 +27,14 @@ export const routes: Routes = [
                     {
                         path: 'posts',
                         loadComponent: () => import('./profile/posts/posts.component').then(m => m.PostsComponent)
+                    },
+                    {
+                        path: 'reactions',
+                        loadComponent: () => import('./profile/reactions/reactions.component').then(m => m.ReactionsComponent)
+                    },
+                    {
+                        path: 'comments',
+                        loadComponent: () => import('./profile/comments/comments.component').then(m => m.CommentsComponent)
                     }
                 ]
             }
