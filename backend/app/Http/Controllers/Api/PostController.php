@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\Reaction;
 use App\Models\User;
 use App\Services\FeedService;
+use Exception;
 
 class PostController extends Controller
 {
@@ -17,6 +18,38 @@ class PostController extends Controller
     public function __construct(FeedService $feedService)
     {
         $this->feedService = $feedService;
+    }
+
+    public function postPost(Request $request)
+    {
+        $validated = $request->validate([
+            'content' => 'required|string|max:5000',
+            'is_public' => 'boolean',
+            'meta' => 'nullable|array'
+        ]);
+
+        try {
+            $user = $request->user();
+            $post = Post::create([
+                'user_id' => $user->id,
+                'content' => $validated['content'],
+                'is_public' => $validated['is_public'] ?? true,
+                'meta' => $validated['meta'] ?? null,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Post created successfully',
+                'post' => $post
+            ], 201);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error creating post',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -53,15 +86,15 @@ class PostController extends Controller
         $perPage = $request->get('per_page', 10);
 
         $reactions = Reaction::with(['reactionable' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            }])
+            $query->where('user_id', $user->id);
+        }])
             ->where('user_id', $user->id)
             ->where('reactionable_type', 'App\\Models\\Post')
             ->get(['id', 'reactionable_id', 'reactionable_type', 'type']);
 
         $postIds = [];
         $reactionData = [];
-        
+
         foreach ($reactions as $reaction) {
             $postIds[] = $reaction->reactionable_id;
             $reactionData[$reaction->reactionable_id] = [
