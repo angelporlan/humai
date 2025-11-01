@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
 
 @Component({
@@ -19,11 +19,32 @@ export class ProfileComponent {
   following_count: number = 0;
   posts_count: number = 0;
   posts: any[] = [];
+  activeTab: string = 'posts';
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService) { }
+  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router) { }
 
   ngOnInit(): void {
     this.username = this.route.snapshot.paramMap.get('username')!;
+    this.loadProfileData();
+    
+    this.updateActiveTabFromUrl();
+    
+    this.route.url.subscribe(() => {
+      this.updateActiveTabFromUrl();
+    });
+  }
+  
+  private updateActiveTabFromUrl(): void {
+    const segments = this.router.url.split('/');
+    const lastSegment = segments[segments.length - 1];
+    if (['reactions', 'comments', 'posts'].includes(lastSegment)) {
+      this.activeTab = lastSegment;
+    } else {
+      this.activeTab = 'posts';
+    }
+  }
+
+  loadProfileData() {
     this.getInfoOfAUsername();
   }
 
@@ -39,4 +60,8 @@ export class ProfileComponent {
     });
   }
 
+  changeUrl(tab: string) {
+    this.activeTab = tab;
+    this.router.navigate(['/profile', this.username, tab]);
+  }
 }

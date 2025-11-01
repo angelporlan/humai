@@ -26,9 +26,15 @@
             <button class="follow-button">Seguir</button>
         </div>
         <div class="tablist">
-            <button class="toggle-button toggle-active">Publicaciones</button>
-            <button class="toggle-button">Gustados</button>
-            <button class="toggle-button">Comentarios</button>
+            <button class="toggle-button" [class.toggle-active]="activeTab === 'posts'" (click)="changeUrl('posts')">
+                Publicaciones
+            </button>
+            <button class="toggle-button" [class.toggle-active]="activeTab === 'reactions'" (click)="changeUrl('reactions')">
+                Reacciones
+            </button>
+            <button class="toggle-button" [class.toggle-active]="activeTab === 'comments'" (click)="changeUrl('comments')">
+                Comentarios
+            </button>
         </div>
     </section>
 
