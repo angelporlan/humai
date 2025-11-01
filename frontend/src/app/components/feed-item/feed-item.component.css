@@ -5,6 +5,7 @@
     background-color: var(--color-secondary);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
+    position: relative;
 }
 
 .post-header {
@@ -118,4 +119,15 @@
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+.post-reactions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.post-reactions img {
+    width: 24px;
+    height: 24px;
 }

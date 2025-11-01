@@ -16,6 +16,7 @@ export class FeedItemComponent {
     @Input() likes: number = 0;
     @Input() comments: number = 0;
     @Input() tags: string[] = [];
+    @Input() reactions: string = '';
 
     constructor(private router: Router) { }
 

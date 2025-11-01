@@ -26,4 +26,8 @@
             <span class="count">{{ comments }}</span>
         </button>
     </div>
+
+    <div *ngIf="reactions" class="post-reactions">
+        <img src="reactions/{{ reactions }}.svg" alt="{{ reactions }}">
+    </div>
 </div>
