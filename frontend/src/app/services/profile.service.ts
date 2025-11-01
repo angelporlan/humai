@@ -22,4 +22,15 @@ export class ProfileService {
       headers: headers
     });
   }
+
+  getPostsReactedOfAUser(username: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/getPostsReactedOfAUser`, {
+      params: { username },
+      headers: headers
+    });
+  }
 }
