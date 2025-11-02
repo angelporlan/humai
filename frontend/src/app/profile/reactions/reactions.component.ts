@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { ProfileService } from '../../services/profile.service';
 import { FeedItemComponent } from '../../components/feed-item/feed-item.component';
+import { FeedItemLoaderComponent } from '../../components/feed-item-loader/feed-item-loader.component';
 
 @Component({
   selector: 'app-reactions',
   standalone: true,
-  imports: [CommonModule, FeedItemComponent],
+  imports: [CommonModule, FeedItemComponent, FeedItemLoaderComponent],
   templateUrl: './reactions.component.html',
   styleUrls: ['./reactions.component.css']
 })
@@ -15,6 +16,7 @@ export class ReactionsComponent implements OnInit, OnDestroy {
   posts: any[] = [];
   nextPageUrl: string | null = null;
   loading = false;
+  firstLoad = true;
   username: string = '';
   private scrollListener: (() => void) | null = null;
 
@@ -70,6 +72,7 @@ export class ReactionsComponent implements OnInit, OnDestroy {
       complete: () => {
         this.loading = false;
         console.log('Petición completada');
+        this.firstLoad = false;
       }
     });
   }
