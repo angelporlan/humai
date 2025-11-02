@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FeedService } from '../../services/feed.service';
 import { FeedItemComponent } from '../../components/feed-item/feed-item.component';
+import { FeedItemLoaderComponent } from '../../components/feed-item-loader/feed-item-loader.component';
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [CommonModule, FeedItemComponent],
+  imports: [CommonModule, FeedItemComponent, FeedItemLoaderComponent],
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css']
 })
@@ -16,6 +17,7 @@ export class PostsComponent implements OnInit, OnDestroy {
   nextPageUrl: string | null = null;
   loading = false;
   username: string = '';
+  firstLoad = true;
   private scrollListener: (() => void) | null = null;
 
   constructor(
@@ -56,6 +58,7 @@ export class PostsComponent implements OnInit, OnDestroy {
         if (response.data && response.data.length > 0) {
           this.posts = [...this.posts, ...response.data];
           this.nextPageUrl = response.links?.next;
+          this.firstLoad = false;
           console.log('Total posts:', this.posts.length);
           console.log('Next page URL:', this.nextPageUrl);
         } else {

@@ -1,23 +1,31 @@
 <div class="posts-container">
-  <ng-container *ngIf="posts.length > 0; else noPosts">
-    <app-feed-item
-      *ngFor="let post of posts"
-      [userAvatar]="post.user?.avatar || 'default.jpg'"
-      [username]="post.user?.username || ''"
-      [content]="post.content"
-      [date]="post.created_at"
-      [likes]="post.likes_count || 0"
-      [comments]="post.comments_count || 0"
-      [tags]="post.tags || []"
-    ></app-feed-item>
-    
-    <div *ngIf="loading" class="loading">
-      <p>Cargando más publicaciones...</p>
-    </div>
-    <div *ngIf="nextPageUrl" class="load-more">
-      <button (click)="getPosts(nextPageUrl)">Cargar más</button>
-    </div>
+  <ng-container *ngIf="firstLoad; else content">
+    <app-feed-item-loader></app-feed-item-loader>
+    <app-feed-item-loader></app-feed-item-loader>
+    <app-feed-item-loader></app-feed-item-loader>
   </ng-container>
+
+  <ng-template #content>
+    <ng-container *ngIf="posts.length > 0; else noPosts">
+      <app-feed-item
+        *ngFor="let post of posts"
+        [userAvatar]="post.user?.avatar || 'default.jpg'"
+        [username]="post.user?.username || ''"
+        [content]="post.content"
+        [date]="post.created_at"
+        [likes]="post.likes_count || 0"
+        [comments]="post.comments_count || 0"
+        [tags]="post.tags || []"
+      ></app-feed-item>
+      
+      <div *ngIf="firstLoad" class="loading">
+        <p>Cargando más publicaciones...</p>
+      </div>
+      <div *ngIf="nextPageUrl" class="load-more">
+        <button (click)="getPosts(nextPageUrl)">Cargar más</button>
+      </div>
+    </ng-container>
+  </ng-template>
   
   <ng-template #noPosts>
     <div class="no-posts">
