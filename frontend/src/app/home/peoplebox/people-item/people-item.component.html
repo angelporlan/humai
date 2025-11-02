@@ -1,5 +1,5 @@
 <article>
-    <img src="{{ avatar }}" alt="avatar">
+    <img [src]="'/avatars/' + avatar + '.jpg' || '/avatars/default.jpg'" alt="avatar">
     <p>{{ username }}</p>
     <button>Seguir</button>
 </article>
