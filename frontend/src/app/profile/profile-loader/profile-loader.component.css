@@ -1,0 +1,108 @@
+.skeleton-loader {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    padding-left: 0;
+    background: var(--color-primary);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+    margin-top: 24px;
+}
+
+.skeleton-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-primary), white 30%);
+    flex-shrink: 0;
+}
+
+.skeleton-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.skeleton-line {
+    height: 16px;
+    background-color: color-mix(in srgb, var(--color-primary), white 30%);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0) 0%,
+        color-mix(in srgb, var(--color-tertiary), white 10%),
+        rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 1.5s infinite;
+}
+
+/* Specific line sizes */
+.skeleton-line.name {
+    width: 60%;
+    height: 24px;
+    margin-bottom: 4px;
+}
+
+.skeleton-line.username {
+    width: 40%;
+    height: 16px;
+    margin-bottom: 12px;
+    margin-top: 6px;
+}
+
+.skeleton-line.bio {
+    width: 80%;
+    height: 14px;
+    margin: 8px 0;
+}
+
+.skeleton-stats {
+    display: flex;
+    gap: 2rem;
+    margin: 1rem 0;
+}
+
+.skeleton-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.skeleton-line.short {
+    width: 40px;
+    height: 18px;
+}
+
+.skeleton-line.very-short {
+    width: 60px;
+    height: 12px;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
