@@ -10,9 +10,9 @@ import { NgFor } from '@angular/common';
 })
 export class PeopleboxComponent {
     people = [
-        { avatar: 'default.jpg', username: 'user1' },
-        { avatar: 'default.jpg', username: 'user2' },
-        { avatar: 'default.jpg', username: 'user3' },
+        { avatar: 'default', username: 'user1' },
+        { avatar: 'default', username: 'user2' },
+        { avatar: 'default', username: 'user3' },
     ];
 
 }
