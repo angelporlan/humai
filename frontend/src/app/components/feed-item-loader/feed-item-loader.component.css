@@ -1,0 +1,100 @@
+.skeleton-loader {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 1rem;
+    padding: 1rem 1rem 3rem 1rem;
+    background: var(--color-secondary);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+    position: relative;
+}
+
+.skeleton-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-primary), white 30%);
+    flex-shrink: 0;
+}
+
+.skeleton-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.skeleton-line {
+    height: 12px;
+    background-color: color-mix(in srgb, var(--color-primary), white 30%);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0) 0%,
+            color-mix(in srgb, var(--color-tertiary), white 10%),
+            rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 1.5s infinite;
+}
+
+.skeleton-line.short {
+    width: 40%;
+    margin-top: 10px;
+}
+
+.skeleton-line.short2 {
+    margin-top: 6px;
+    width: 20%;
+}
+
+.skeleton-line.medium {
+    width: 70%;
+}
+
+.skeleton-footer {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.end {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    width: 100px;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
