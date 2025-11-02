@@ -1,7 +1,9 @@
 <div class="profile-container">
     <section>
-        <div class="profile-picture">
-            <img [src]="'default.jpg'" [alt]="name || 'Usuario'">
+        <app-profile-loader *ngIf="loading"></app-profile-loader>
+        <div *ngIf="!loading" class="profile-header">
+                    <div class="profile-picture">
+            <img [src]="'/avatars/' + avatar + '.jpg' || '/avatars/default.jpg'" [alt]="name || 'Usuario'">
         </div>
         <div class="profile-info">
             <h2>{{ name || 'Nombre de usuario' }}</h2>
@@ -24,6 +26,7 @@
             </div>
             
             <button class="follow-button">Seguir</button>
+        </div>
         </div>
         <div class="tablist">
             <button class="toggle-button" [class.toggle-active]="activeTab === 'posts'" (click)="changeUrl('posts')">

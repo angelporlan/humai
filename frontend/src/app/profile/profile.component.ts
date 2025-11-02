@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
+import { ProfileLoaderComponent } from './profile-loader/profile-loader.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ProfileLoaderComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
@@ -20,6 +21,7 @@ export class ProfileComponent {
   posts_count: number = 0;
   posts: any[] = [];
   activeTab: string = 'posts';
+  loading = false;
 
   constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router) { }
 
@@ -49,6 +51,7 @@ export class ProfileComponent {
   }
 
   getInfoOfAUsername() {
+    this.loading = true;
     this.profileService.getInfoOfAUsername(this.username).subscribe((response: any) => {
       console.log(response);
       this.avatar = response.avatar;
@@ -57,6 +60,7 @@ export class ProfileComponent {
       this.followers_count = response.followers_count;
       this.following_count = response.following_count;
       this.posts_count = response.posts_count;
+      this.loading = false;
     });
   }
 
