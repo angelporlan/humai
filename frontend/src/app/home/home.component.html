@@ -1,5 +1,12 @@
 <h2>Inicio</h2>
-<app-sharebox></app-sharebox>
-<app-feed-item *ngFor="let post of feed" [userAvatar]="post.user.avatar" [username]="post.user.username"
+<app-sharebox (newPost)="handleNewPost($event)"></app-sharebox>
+<div *ngIf="firstLoad">
+    <app-feed-item-loader></app-feed-item-loader>
+    <app-feed-item-loader></app-feed-item-loader>
+    <app-feed-item-loader></app-feed-item-loader>
+</div>
+<div *ngIf="!firstLoad">
+    <app-feed-item *ngFor="let post of feed" [userAvatar]="post.user.avatar" [username]="post.user.username"
     [content]="post.content" [date]="post.created_at" [likes]="post.likes_count" [comments]="post.comments_count"
     [tags]="post.tags" />
+</div>
