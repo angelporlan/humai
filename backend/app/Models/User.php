@@ -79,4 +79,18 @@ class User extends Authenticatable
     public function scopeActive($query) {
         return $query->whereNotNull('email_verified_at');
     }
+
+    /**
+     * Check if the user has reacted to a specific post
+     *
+     * @param \App\Models\Post $post
+     * @return bool
+     */
+    public function hasReactedTo(Post $post): bool
+    {
+        return $this->reactions()
+            ->where('reactionable_id', $post->id)
+            ->where('reactionable_type', 'App\\Models\\Post')
+            ->exists();
+    }
 }
