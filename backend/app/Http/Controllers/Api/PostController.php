@@ -10,6 +10,7 @@ use App\Models\Reaction;
 use App\Models\User;
 use App\Services\FeedService;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -117,5 +118,49 @@ class PostController extends Controller
         });
 
         return PostResource::collection($posts);
+    }
+        
+    /**
+     * Reaccionar a un post
+     */
+    public function reactToAPost(Request $request)
+    {
+        $user = $request->user();
+        $postId = $request->get('post_id');
+        $post = Post::find($postId);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        // Check if user has already reacted to this post
+        if ($user->hasReactedTo($post)) {
+            $post->decrement('likes_count');
+            $user->reactions()
+                ->where('reactionable_id', $post->id)
+                ->where('reactionable_type', 'App\\Models\\Post')
+                ->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Reaction removed successfully',
+                'likes_count' => $post->likes_count
+            ], 200);
+        }
+        
+        $reaction = $post->reactions()->create([
+            'user_id' => $user->id,
+            'type' => $request->get('type'),
+            'reactionable_id' => $post->id,
+            'reactionable_type' => 'App\\Models\\Post'
+        ]);
+        $post->increment('likes_count');
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Reaction added successfully',
+            'likes_count' => $post->likes_count
+        ], 200);
     }
 }
