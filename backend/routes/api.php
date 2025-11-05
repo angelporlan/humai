@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getPostsOfAUser', [PostController::class, 'getPostsOfAUser']);
     Route::get('/getPostsReactedOfAUser', [PostController::class, 'getPostsReactedOfAUser']);
     Route::post('/postPost', [PostController::class, 'postPost']);
+    Route::post('/reactToAPost', [PostController::class, 'reactToAPost']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
