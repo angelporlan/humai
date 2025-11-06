@@ -53,4 +53,13 @@ export class FeedService {
       })
     });
   }
+
+  reactToAPost(postId: number, type: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    return this.http.post(`${this.apiUrl}/reactToAPost`, { post_id: postId, type }, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
 }
