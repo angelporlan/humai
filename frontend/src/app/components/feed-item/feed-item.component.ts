@@ -19,8 +19,14 @@ export class FeedItemComponent {
     @Input() tags: string[] = [];
     @Input() reactions: string = '';
     @Input() postId: number = 0;
+    @Input() userHasReacted: boolean = false;
+    @Input() userReactionType: string = '';
 
     constructor(private router: Router, private feedService: FeedService) { }
+
+    ngOnInit(): void {
+        console.log(this.userReactionType);
+    }
 
     navigateTo(path: string): void {
         this.router.navigate([path]);
@@ -30,8 +36,10 @@ export class FeedItemComponent {
         this.feedService.reactToAPost(postId, type).subscribe((res) => {
             if (res.message === 'Reaction removed successfully') {
                 this.likes--;
+                this.userHasReacted = false;
             } else {
                 this.likes++;
+                this.userHasReacted = true;
             }
         });
     }

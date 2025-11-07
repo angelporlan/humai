@@ -77,13 +77,18 @@
     background-color: rgba(114, 133, 10, 0.1);
 }
 
+
 .action-button img {
     width: 16px;
     height: 16px;
-    filter: invert(46%) sepia(8%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(86%);
     transition: filter 0.2s;
 }
 
+.not-liked img {
+    filter: invert(46%) sepia(8%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(86%);
+}
+
+/*
 .like-button img {
     filter: invert(46%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(86%);
 }
@@ -98,7 +103,7 @@
 
 .like-button.liked:hover img {
     filter: invert(40%) sepia(99%) saturate(7404%) hue-rotate(0deg) brightness(120%) contrast(118%);
-}
+} */
 
 .comment-button img {
     filter: invert(46%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(86%);

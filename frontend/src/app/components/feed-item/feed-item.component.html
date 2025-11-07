@@ -16,8 +16,8 @@
     </div>
 
     <div class="post-footer">
-        <button (click)="reactToAPost(postId, 'like')" class="action-button like-button">
-            <img src="icons/heart.svg" alt="heart">
+        <button (click)="reactToAPost(postId, 'like')" class="action-button like-button" [class.not-liked]="!userHasReacted" [class.liked]="userHasReacted">
+            <img [src]="userHasReacted ? 'reactions/' + userReactionType + '.svg' : 'icons/heart.svg'" alt="heart">
             <span class="count">{{ likes }}</span>
         </button>
         <button class="action-button comment-button">
