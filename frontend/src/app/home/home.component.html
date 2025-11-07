@@ -8,5 +8,5 @@
 <div *ngIf="!firstLoad">
     <app-feed-item *ngFor="let post of feed" [userAvatar]="post.user.avatar" [username]="post.user.username"
     [content]="post.content" [date]="post.created_at" [likes]="post.likes_count" [comments]="post.comments_count"
-    [tags]="post.tags" [postId]="post.id" />
+    [tags]="post.tags" [postId]="post.id" [userHasReacted]="post.user_has_reacted" [userReactionType]="post.user_reaction_type" />
 </div>
