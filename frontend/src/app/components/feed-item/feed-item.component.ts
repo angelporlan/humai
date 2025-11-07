@@ -3,6 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FeedService } from '../../services/feed.service';
 
+interface ReactionType {
+    type: string;
+    name: string;
+}
+
 @Component({
     selector: 'app-feed-item',
     imports: [CommonModule],
@@ -22,25 +27,54 @@ export class FeedItemComponent {
     @Input() userHasReacted: boolean = false;
     @Input() userReactionType: string = '';
 
-    constructor(private router: Router, private feedService: FeedService) { }
+    showReactions = false;
+    reactionTimer: any;
 
-    ngOnInit(): void {
-        console.log(this.userReactionType);
-    }
+    availableReactions: ReactionType[] = [
+        { type: 'like', name: 'Me gusta' },
+        { type: 'love', name: 'Me encanta' },
+        { type: 'haha', name: 'Me divierte' },
+        { type: 'wow', name: 'Me asombra' },
+        { type: 'sad', name: 'Me entristece' },
+        { type: 'angry', name: 'Me enfada' },
+        { type: 'celebrate', name: 'Me ovaciona' },
+        { type: 'beer', name: 'Me brindo' },
+    ];
+
+    constructor(private router: Router, private feedService: FeedService) { }
 
     navigateTo(path: string): void {
         this.router.navigate([path]);
     }
 
-    reactToAPost(postId: number, type: string): void {
-        this.feedService.reactToAPost(postId, type).subscribe((res) => {
-            if (res.message === 'Reaction removed successfully') {
-                this.likes--;
-                this.userHasReacted = false;
-            } else {
-                this.likes++;
-                this.userHasReacted = true;
+    onReactionLeave(): void {
+        this.reactionTimer = setTimeout(() => {
+            if (this.showReactions) {
+                this.showReactions = false;
             }
+        }, 300);
+    }
+
+    onReactionPickerEnter(): void {
+        this.clearReactionTimer();
+        this.showReactions = true;
+    }
+
+    clearReactionTimer(): void {
+        if (this.reactionTimer) {
+            clearTimeout(this.reactionTimer);
+        }
+    }
+
+    reactToPost(postId: number, type: string): void {
+        this.clearReactionTimer();
+
+        this.feedService.reactToAPost(postId, type).subscribe((res: any) => {
+            this.likes = res.likes_count;
+            this.userHasReacted = res.user_has_reacted;
+            this.userReactionType = res.reaction_type || '';
+            this.showReactions = false;
         });
     }
+
 }

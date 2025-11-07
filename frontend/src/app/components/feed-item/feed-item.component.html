@@ -16,10 +16,32 @@
     </div>
 
     <div class="post-footer">
-        <button (click)="reactToAPost(postId, 'like')" class="action-button like-button" [class.not-liked]="!userHasReacted" [class.liked]="userHasReacted">
-            <img [src]="userHasReacted ? 'reactions/' + userReactionType + '.svg' : 'icons/heart.svg'" alt="heart">
-            <span class="count">{{ likes }}</span>
-        </button>
+        <div class="reaction-container" (mouseleave)="onReactionLeave()">
+            <button 
+                (mouseenter)="showReactions = true" 
+                class="action-button like-button" 
+                [class.not-liked]="!userHasReacted" 
+                [class.liked]="userHasReacted"
+                (click)="reactToPost(postId, 'like')">
+                <img [src]="userHasReacted ? 'reactions/' + userReactionType + '.svg' : 'icons/heart.svg'" alt="heart">
+                <span class="count">{{ likes }}</span>
+            </button>
+            
+            <div 
+                class="reaction-picker" 
+                *ngIf="showReactions" 
+                (mouseenter)="onReactionPickerEnter()"
+                (mouseleave)="showReactions = false">
+                <button 
+                    *ngFor="let reaction of availableReactions"
+                    (click)="reactToPost(postId, reaction.type); showReactions = false"
+                    class="reaction-option"
+                    [title]="reaction.name">
+                    <img [src]="'reactions/' + reaction.type + '.svg'" [alt]="reaction.name">
+                </button>
+            </div>
+        </div>
+        
         <button class="action-button comment-button">
             <img src="icons/message.svg" alt="message">
             <span class="count">{{ comments }}</span>
