@@ -45,6 +45,7 @@ export class HomeComponent {
 
         this.feedService.getFeed(url).subscribe({
             next: (res) => {
+                console.log(res);
                 const newItems = Array.isArray(res.data) ? res.data : [res.data];
                 this.feed = [...this.feed, ...newItems];
                 this.nextPageUrl = res.links?.next || null;
