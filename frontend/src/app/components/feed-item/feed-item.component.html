@@ -16,7 +16,7 @@
     </div>
 
     <div class="post-footer">
-        <button class="action-button like-button">
+        <button (click)="reactToAPost(postId, 'like')" class="action-button like-button">
             <img src="icons/heart.svg" alt="heart">
             <span class="count">{{ likes }}</span>
         </button>
