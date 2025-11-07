@@ -16,6 +16,7 @@
         [likes]="post.likes_count || 0"
         [comments]="post.comments_count || 0"
         [tags]="post.tags || []"
+        [postId]="post.id"
       ></app-feed-item>
       
       <div *ngIf="firstLoad" class="loading">
