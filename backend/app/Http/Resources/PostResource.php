@@ -44,6 +44,8 @@ class PostResource extends JsonResource
             'likes_count' => $this->likes_count,
             'tags' => $this->tags->pluck('name'),
             'created_at' => $this->created_at->toDateTimeString(),
+            'user_has_reacted' => $this->user_has_reacted ?? false,
+            'user_reaction_type' => $this->user_reaction_type ?? null,
         ];
     }
 }
