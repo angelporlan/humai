@@ -153,9 +153,6 @@ class PostController extends Controller
             ], 404);
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => CommentResource::collection($comments->getCollection())->response()->getData(true)
-        ]);
+        return CommentResource::collection($comments);
     }
 }
