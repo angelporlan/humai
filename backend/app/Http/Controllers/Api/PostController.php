@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\CommentResource;
 use App\Models\Post;
 use App\Models\Reaction;
 use App\Models\User;
@@ -133,5 +134,28 @@ class PostController extends Controller
             collect($result)->except('status'),
             $result['status']
         );
+    }
+
+    /**
+     * Obtener comentarios de un usuario
+     */
+    public function getCommentsOfAUser(Request $request)
+    {
+        $username = $request->get('username');
+        $perPage = $request->get('per_page', 10);
+        
+        $comments = $this->feedService->getCommentsByUser($username, $perPage);
+        
+        if (!$comments) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => CommentResource::collection($comments->getCollection())->response()->getData(true)
+        ]);
     }
 }
