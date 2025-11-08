@@ -118,6 +118,51 @@ class FeedService
             'status' => 200
         ];
     }
+    /**
+     * Toggle a comment on a post
+     * 
+     * @param User $user The user who is commenting
+     * @param int $postId The ID of the post to comment on
+     * @param string $comment The comment content
+     * @return array
+     */
+    public function togglePostComment(User $user, int $postId, string $comment)
+    {
+        $post = Post::find($postId);
+        
+        if (!$post) {
+            return [
+                'success' => false,
+                'message' => 'Post not found',
+                'status' => 404
+            ];
+        }
+
+        if (empty(trim($comment))) {
+            return [
+                'success' => false,
+                'message' => 'Comment cannot be empty',
+                'status' => 400
+            ];
+        }
+
+        $newComment = $post->comments()->create([
+            'user_id' => $user->id,
+            'content' => $comment
+        ]);
+
+        $post->increment('comments_count');
+
+        $newComment->load('user');
+
+        return [
+            'success' => true,
+            'message' => 'Comment added successfully',
+            'comment' => $newComment,
+            'comments_count' => $post->comments_count,
+            'status' => 201
+        ];
+    }
 
     /**
      * Get posts that a specific user has reacted to
@@ -168,4 +213,6 @@ class FeedService
 
         return $posts;
     }
+
+
 }
