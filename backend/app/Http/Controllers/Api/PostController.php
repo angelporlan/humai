@@ -117,4 +117,21 @@ class PostController extends Controller
             $result['status']
         );
     }
+
+    /**
+     * Comentar a un post
+     */
+    public function commentToAPost(Request $request)
+    {
+        $user = $request->user();
+        $postId = $request->get('post_id');
+        $comment = $request->get('comment');
+        
+        $result = $this->feedService->togglePostComment($user, $postId, $comment);
+        
+        return response()->json(
+            collect($result)->except('status'),
+            $result['status']
+        );
+    }
 }
