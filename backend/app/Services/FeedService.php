@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Reaction;
+use App\Models\Comment;
 
 class FeedService
 {
@@ -32,7 +33,7 @@ class FeedService
     public function getPostsByUser(User $requestingUser, string $username, int $perPage = 10)
     {
         $user = User::where('username', $username)->first();
-        
+
         if (!$user) {
             return null;
         }
@@ -69,7 +70,7 @@ class FeedService
     public function togglePostReaction(User $user, int $postId, string $reactionType = 'like')
     {
         $post = Post::find($postId);
-        
+
         if (!$post) {
             return [
                 'success' => false,
@@ -88,7 +89,7 @@ class FeedService
             // Remove existing reaction
             $post->decrement('likes_count');
             $existingReaction->delete();
-            
+
             return [
                 'success' => true,
                 'message' => 'Reaction removed successfully',
@@ -106,9 +107,9 @@ class FeedService
             'reactionable_id' => $post->id,
             'reactionable_type' => 'App\\Models\\Post'
         ]);
-        
+
         $post->increment('likes_count');
-        
+
         return [
             'success' => true,
             'message' => 'Reaction added successfully',
@@ -129,7 +130,7 @@ class FeedService
     public function togglePostComment(User $user, int $postId, string $comment)
     {
         $post = Post::find($postId);
-        
+
         if (!$post) {
             return [
                 'success' => false,
@@ -167,10 +168,39 @@ class FeedService
     /**
      * Get posts that a specific user has reacted to
      */
+    /**
+     * Get comments made by a specific user
+     * 
+     * @param string $username Username of the user whose comments to retrieve
+     * @param int $perPage Number of items per page
+     * @return \Illuminate\Pagination\LengthAwarePaginator|null
+     */
+    public function getCommentsByUser(string $username, int $perPage = 10)
+    {
+        $user = User::where('username', $username)->first();
+
+        if (!$user) {
+            return null;
+        }
+
+        $comments = Comment::with(['user', 'post' => function ($query) {
+            $query->withCount(['comments', 'reactions'])
+                ->with(['user', 'reactions']);
+        }])
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        return $comments;
+    }
+
+    /**
+     * Get posts that a specific user has reacted to
+     */
     public function getPostsReactedByUser(string $username, int $perPage = 10)
     {
         $user = User::where('username', $username)->first();
-        
+
         if (!$user) {
             return null;
         }
@@ -190,7 +220,10 @@ class FeedService
 
         if (empty($postIds)) {
             return new \Illuminate\Pagination\LengthAwarePaginator(
-                [], 0, $perPage, 1
+                [],
+                0,
+                $perPage,
+                1
             );
         }
 
@@ -213,6 +246,4 @@ class FeedService
 
         return $posts;
     }
-
-
 }
