@@ -26,6 +26,11 @@ export class FeedItemComponent {
     @Input() postId: number = 0;
     @Input() userHasReacted: boolean = false;
     @Input() userReactionType: string = '';
+    @Input() showComment: boolean = false;
+    @Input() commentImage: any = '2';
+    @Input() commentUsername: any = '';
+    @Input() commentContent: any = '';
+    @Input() commentDate: any = '';
 
     showReactions = false;
     reactionTimer: any;

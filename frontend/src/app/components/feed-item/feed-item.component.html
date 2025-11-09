@@ -1,6 +1,7 @@
 <div class="post-card">
     <div class="post-header">
-        <img class="avatar" [src]="'/avatars/' + userAvatar + '.jpg' || '/avatars/default.jpg'" alt="{{ username }} Avatar">
+        <img class="avatar" [src]="'/avatars/' + userAvatar + '.jpg' || '/avatars/default.jpg'"
+            alt="{{ username }} Avatar">
         <div class="user-info">
             <h2 class="username" (click)="navigateTo('profile/' + username)">{{ username }}</h2>
             <span class="date">{{ date | date:'short' }}</span>
@@ -17,31 +18,23 @@
 
     <div class="post-footer">
         <div class="reaction-container" (mouseleave)="onReactionLeave()">
-            <button 
-                (mouseenter)="showReactions = true" 
-                class="action-button like-button" 
-                [class.not-liked]="!userHasReacted" 
-                [class.liked]="userHasReacted"
+            <button (mouseenter)="showReactions = true" class="action-button like-button"
+                [class.not-liked]="!userHasReacted" [class.liked]="userHasReacted"
                 (click)="reactToPost(postId, 'like')">
                 <img [src]="userHasReacted ? 'reactions/' + userReactionType + '.svg' : 'icons/heart.svg'" alt="heart">
                 <span class="count">{{ likes }}</span>
             </button>
-            
-            <div 
-                class="reaction-picker" 
-                *ngIf="showReactions" 
-                (mouseenter)="onReactionPickerEnter()"
+
+            <div class="reaction-picker" *ngIf="showReactions" (mouseenter)="onReactionPickerEnter()"
                 (mouseleave)="showReactions = false">
-                <button 
-                    *ngFor="let reaction of availableReactions"
-                    (click)="reactToPost(postId, reaction.type); showReactions = false"
-                    class="reaction-option"
+                <button *ngFor="let reaction of availableReactions"
+                    (click)="reactToPost(postId, reaction.type); showReactions = false" class="reaction-option"
                     [title]="reaction.name">
                     <img [src]="'reactions/' + reaction.type + '.svg'" [alt]="reaction.name">
                 </button>
             </div>
         </div>
-        
+
         <button class="action-button comment-button">
             <img src="icons/message.svg" alt="message">
             <span class="count">{{ comments }}</span>
@@ -50,5 +43,18 @@
 
     <div *ngIf="reactions" class="post-reactions">
         <img src="reactions/{{ reactions }}.svg" alt="{{ reactions }}">
+    </div>
+    <div class="post-comment" *ngIf="showComment">
+        <div class="comment-header">
+            <img [src]="'/avatars/' + (commentImage || 'default') + '.jpg'" [alt]="commentUsername"
+                class="comment-avatar">
+            <div class="comment-user-info">
+                <span class="comment-username">{{ commentUsername }}</span>
+                <span class="comment-date">{{ commentDate | date:'short' }}</span>
+            </div>
+        </div>
+        <div class="post-content">
+            {{ commentContent }}
+        </div>
     </div>
 </div>
