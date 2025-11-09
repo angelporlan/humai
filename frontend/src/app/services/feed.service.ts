@@ -62,4 +62,22 @@ export class FeedService {
       })
     });
   }
+  
+  getCommentsOfAUser(username: string, url?: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    if (url) {
+      const body = { username };
+      return this.http.get(`${url}`, {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        }),
+        params: body
+      });
+    }
+    return this.http.get(`${this.apiUrl}/getCommentsOfAUser?username=${username}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
 }
