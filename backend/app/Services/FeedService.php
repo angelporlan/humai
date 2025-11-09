@@ -184,12 +184,24 @@ class FeedService
         }
 
         $comments = Comment::with(['user', 'post' => function ($query) {
-            $query->withCount(['comments', 'reactions'])
+            $query->withCount(['comments', 'reactions', 'tags'])
                 ->with(['user', 'reactions']);
         }])
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
+
+        $requestingUserId = $user->id;
+
+        $comments->getCollection()->transform(function ($comment) use ($requestingUserId) {
+            if ($comment->post) {
+                $userReaction = $comment->post->reactions->firstWhere('user_id', $requestingUserId);
+
+                $comment->post->user_has_reacted = $userReaction ? true : false;
+                $comment->post->user_reaction_type = $userReaction ? $userReaction->type : null;
+            }
+            return $comment;
+        });
 
         return $comments;
     }
