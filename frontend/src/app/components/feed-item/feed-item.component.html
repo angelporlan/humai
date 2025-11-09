@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <button class="action-button comment-button">
+        <button class="action-button comment-button" (click)="toggleInputComment()" [ngClass]="showInputComment ? 'active' : ''">
             <img src="icons/message.svg" alt="message">
             <span class="count">{{ comments }}</span>
         </button>
@@ -57,4 +57,25 @@
             {{ commentContent }}
         </div>
     </div>
+    <div class="reply-section" *ngIf="showInputComment">
+    <div class="reply-header">
+        <span class="reply-title">Respondiendo a {{ username }}</span>
+        <span (click)="toggleInputComment()">x</span>
+    </div>
+    <div class="reply-input">
+        <textarea 
+            class="reply-textarea" 
+            placeholder="Escribe tu respuesta..."
+            [(ngModel)]="commentInput"
+            (keydown.enter)="$event.preventDefault(); onReplySubmit()">
+        </textarea>
+        <div class="reply-actions">
+            <button class="reply-submit" (click)="onReplySubmit()">
+                <span>Enviar</span>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 </div>
+
+

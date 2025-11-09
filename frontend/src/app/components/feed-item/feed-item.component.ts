@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FeedService } from '../../services/feed.service';
+import { FormsModule } from '@angular/forms';
 
 interface ReactionType {
     type: string;
@@ -10,7 +11,7 @@ interface ReactionType {
 
 @Component({
     selector: 'app-feed-item',
-    imports: [CommonModule],
+    imports: [CommonModule, FormsModule],
     templateUrl: './feed-item.component.html',
     styleUrl: './feed-item.component.css'
 })
@@ -34,6 +35,8 @@ export class FeedItemComponent {
 
     showReactions = false;
     reactionTimer: any;
+    showInputComment = false;
+    commentInput: string = '';
 
     availableReactions: ReactionType[] = [
         { type: 'like', name: 'Me gusta' },
@@ -82,4 +85,17 @@ export class FeedItemComponent {
         });
     }
 
+    toggleInputComment(): void {
+        this.showInputComment = !this.showInputComment;
+    }
+
+    onReplySubmit(): void {
+        this.feedService.commentToAPost(this.postId, this.commentInput).subscribe((res: any) => {
+            this.comments = res.comments_count;
+            this.showComment = false;
+            this.commentInput = '';
+            console.log('Reply submitted', this.commentInput);
+            console.log('Comments count', res);
+        });
+    }
 }
