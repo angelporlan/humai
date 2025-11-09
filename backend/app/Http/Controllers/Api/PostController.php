@@ -155,4 +155,20 @@ class PostController extends Controller
 
         return CommentResource::collection($comments);
     }
+
+    public function getPost(Request $request)
+    {
+        $postId = $request->get('post_id');
+        $user = $request->user();
+        $post = $this->feedService->getPost($postId, $user);
+        
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+        
+        return new PostResource($post);
+    }
 }
