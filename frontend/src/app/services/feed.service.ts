@@ -80,4 +80,13 @@ export class FeedService {
       })
     });
   }
+
+  commentToAPost(postId: number, comment: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    return this.http.post(`${this.apiUrl}/commentToAPost`, { post_id: postId, comment }, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
 }
