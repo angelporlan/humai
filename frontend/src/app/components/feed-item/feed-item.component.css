@@ -29,6 +29,10 @@
     cursor: pointer;
 }
 
+.user-info .username:hover {
+    text-decoration: underline;
+}
+
 .user-info .date {
     font-size: 0.8em;
     color: #888;
@@ -222,4 +226,92 @@
     border-top: 2.4px solid var(--color-primary);
     margin-top: 12px;
     padding-top: 12px;
+}
+
+/* Reply Section Styles */
+.reply-section {
+    margin-top: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--color-quaternary);
+}
+
+.reply-header {
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.reply-header :nth-child(2) {
+    cursor: pointer;
+    color: var(--color-septenary);
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-right: 2px;
+}
+    
+
+.reply-title {
+    font-size: 0.9em;
+    color: var(--color-quaternary);
+    font-weight: 500;
+}
+
+.reply-input {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reply-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-nary);
+    border-radius: 8px;
+    background-color: var(--color-secondary);
+    color: var(--color-quaternary);
+    resize: none;
+    font-family: inherit;
+    font-size: 0.95em;
+    line-height: 1.4;
+    min-height: 80px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.reply-textarea:focus {
+    outline: none;
+    border: 1px solid var(--color-quaternary);
+}
+
+.reply-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.reply-submit {
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: var(--color-tertiary);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+.reply-submit:hover {
+    opacity: 0.8;
+}
+
+.active img {
+    filter: invert(316%) sepia(99%) saturate(404%) hue-rotate(166deg) brightness(195%) contrast(138%);
+    transition: filter 0.2s;
+}
+
+.active span {
+    color: var(--color-quaternary);
 }
