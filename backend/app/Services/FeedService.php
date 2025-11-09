@@ -258,4 +258,28 @@ class FeedService
 
         return $posts;
     }
+
+    public function getPost(int $postId, ?User $user = null)
+    {
+        $post = Post::with(['user', 'comments', 'reactions', 'tags'])
+            ->find($postId);
+
+        if (!$post) {
+            return null;
+        }
+
+        $post->user_has_reacted = false;
+        $post->user_reaction_type = null;
+
+        if ($user) {
+            $reaction = $post->reactions()->where('user_id', $user->id)->first();
+            
+            if ($reaction) {
+                $post->user_has_reacted = true;
+                $post->user_reaction_type = $reaction->type;
+            }
+        }
+
+        return $post;
+    }
 }
