@@ -16,6 +16,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
             },
             {
+                path: 'post/:postId',
+                loadComponent: () => import('./post/post.component').then(m => m.PostComponent)
+            },
+            {
                 path: 'profile/:username',
                 loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent),
                 children: [
