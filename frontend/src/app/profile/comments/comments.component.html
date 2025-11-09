@@ -1,1 +1,43 @@
-<p>comments works!</p>
+<div class="posts-container">
+  <ng-container *ngIf="firstLoad; else content">
+    <app-feed-item-loader></app-feed-item-loader>
+    <app-feed-item-loader></app-feed-item-loader>
+    <app-feed-item-loader></app-feed-item-loader>
+  </ng-container>
+
+  <ng-template #content>
+    <ng-container *ngIf="posts.length > 0; else noPosts">
+      <app-feed-item
+        *ngFor="let post of posts"
+        [userAvatar]="post.post.user?.avatar || 'default'"
+        [username]="post.post.user?.username || ''"
+        [content]="post.post.content"
+        [date]="post.post.created_at"
+        [likes]="post.post.likes_count || 0"
+        [comments]="post.post.comments_count || 0"
+        [tags]="post.post.tags || []"
+        [postId]="post.post.id"
+        [userHasReacted]="post.post.user_has_reacted"
+        [userReactionType]="post.post.user_reaction_type"
+        [showComment]="true"
+        [commentImage]="post.user.avatar"
+        [commentUsername]="post.user.username"
+        [commentContent]="post.content"
+        [commentDate]="post.created_at"
+      ></app-feed-item>
+      
+      <div *ngIf="firstLoad" class="loading">
+        <p>Cargando más publicaciones...</p>
+      </div>
+      <div *ngIf="nextPageUrl" class="load-more">
+        <button (click)="getPosts(nextPageUrl)">Cargar más</button>
+      </div>
+    </ng-container>
+  </ng-template>
+  
+  <ng-template #noPosts>
+    <div class="no-posts">
+      <p>No hay publicaciones para mostrar</p>
+    </div>
+  </ng-template>
+</div>
