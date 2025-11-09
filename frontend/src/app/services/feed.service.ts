@@ -89,4 +89,13 @@ export class FeedService {
       })
     });
   }
+
+  getPost(postId: number): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    return this.http.get(`${this.apiUrl}/getPost?post_id=${postId}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
 }
