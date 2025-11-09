@@ -29,6 +29,10 @@ class CommentResource extends JsonResource
                 'content' => $this->post->content,
                 'comments_count' => $this->post->comments_count,
                 'likes_count' => $this->post->likes_count,
+                'created_at' => $this->post->created_at,
+                'tags' => $this->post->tags->pluck('name')->toArray(),
+                'user_has_reacted' => $this->post->user_has_reacted ?? false,
+                'user_reaction_type' => $this->post->user_reaction_type ?? null,
                 'user' => [
                     'id' => $this->post->user->id,
                     'name' => $this->post->user->name,
