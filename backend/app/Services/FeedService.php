@@ -21,6 +21,7 @@ class FeedService
 
         $posts = Post::with(['user', 'comments', 'reactions', 'tags'])
             ->whereIn('user_id', $followingIds)
+            ->where('parent_post', null)
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
@@ -40,6 +41,7 @@ class FeedService
 
         $posts = Post::with(['user', 'comments', 'reactions', 'tags'])
             ->where('user_id', $user->id)
+            ->where('parent_post', null)
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
@@ -119,51 +121,7 @@ class FeedService
             'status' => 200
         ];
     }
-    /**
-     * Toggle a comment on a post
-     * 
-     * @param User $user The user who is commenting
-     * @param int $postId The ID of the post to comment on
-     * @param string $comment The comment content
-     * @return array
-     */
-    public function togglePostComment(User $user, int $postId, string $comment)
-    {
-        $post = Post::find($postId);
 
-        if (!$post) {
-            return [
-                'success' => false,
-                'message' => 'Post not found',
-                'status' => 404
-            ];
-        }
-
-        if (empty(trim($comment))) {
-            return [
-                'success' => false,
-                'message' => 'Comment cannot be empty',
-                'status' => 400
-            ];
-        }
-
-        $newComment = $post->comments()->create([
-            'user_id' => $user->id,
-            'content' => $comment
-        ]);
-
-        $post->increment('comments_count');
-
-        $newComment->load('user');
-
-        return [
-            'success' => true,
-            'message' => 'Comment added successfully',
-            'comment' => $newComment,
-            'comments_count' => $post->comments_count,
-            'status' => 201
-        ];
-    }
 
     /**
      * Get posts that a specific user has reacted to
@@ -183,27 +141,30 @@ class FeedService
             return null;
         }
 
-        $comments = Comment::with(['user', 'post' => function ($query) {
-            $query->withCount(['comments', 'reactions', 'tags'])
-                ->with(['user', 'reactions']);
-        }])
-            ->where('user_id', $user->id)
+        $posts = Post::where('user_id', $user->id)
+            ->where('parent_post', '!=', null)
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
 
-        $requestingUserId = $user->id;
+        $posts->getCollection()->transform(function ($post) use ($user) {
+            $post->user_has_reacted = false;
+            $post->user_reaction_type = null;
 
-        $comments->getCollection()->transform(function ($comment) use ($requestingUserId) {
-            if ($comment->post) {
-                $userReaction = $comment->post->reactions->firstWhere('user_id', $requestingUserId);
+            $reaction = $post->reactions()->where('user_id', $user->id)->first();
 
-                $comment->post->user_has_reacted = $userReaction ? true : false;
-                $comment->post->user_reaction_type = $userReaction ? $userReaction->type : null;
+            if ($reaction) {
+                $post->user_has_reacted = true;
+                $post->user_reaction_type = $reaction->type;
             }
-            return $comment;
+
+            $parent = Post::find($post->parent_post);
+
+            $post->parent = $parent;
+
+            return $post;
         });
 
-        return $comments;
+        return $posts;
     }
 
     /**
@@ -281,5 +242,27 @@ class FeedService
         }
 
         return $post;
+    }
+
+    /**
+     * Get paginated comments for a specific post
+     *
+     * @param int $postId
+     * @param int $perPage
+     * @return \Illuminate\Pagination\LengthAwarePaginator|null
+     */
+    public function getCommentsByPost(int $postId, int $perPage = 10)
+    {
+        $post = Post::find($postId);
+        
+        if (!$post) {
+            return null;
+        }
+
+        return $post->comments()
+            ->with('user')
+            ->without('post')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
     }
 }
