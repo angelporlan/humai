@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
-use App\Http\Resources\CommentResource;
 use App\Models\Post;
 use App\Models\Reaction;
 use App\Models\User;
@@ -27,7 +26,8 @@ class PostController extends Controller
         $validated = $request->validate([
             'content' => 'required|string|max:5000',
             'is_public' => 'boolean',
-            'meta' => 'nullable|array'
+            'meta' => 'nullable|array',
+            'parent_post' => 'nullable|exists:posts,id'
         ]);
 
         try {
@@ -37,6 +37,7 @@ class PostController extends Controller
                 'content' => $validated['content'],
                 'is_public' => $validated['is_public'] ?? true,
                 'meta' => $validated['meta'] ?? null,
+                'parent_post' => $validated['parent_post'] ?? null,
             ]);
 
             return response()->json([
@@ -119,22 +120,6 @@ class PostController extends Controller
         );
     }
 
-    /**
-     * Comentar a un post
-     */
-    public function commentToAPost(Request $request)
-    {
-        $user = $request->user();
-        $postId = $request->get('post_id');
-        $comment = $request->get('comment');
-        
-        $result = $this->feedService->togglePostComment($user, $postId, $comment);
-        
-        return response()->json(
-            collect($result)->except('status'),
-            $result['status']
-        );
-    }
 
     /**
      * Obtener comentarios de un usuario
@@ -153,7 +138,7 @@ class PostController extends Controller
             ], 404);
         }
 
-        return CommentResource::collection($comments);
+        return PostResource::collection($comments);
     }
 
     public function getPost(Request $request)
@@ -170,5 +155,25 @@ class PostController extends Controller
         }
         
         return new PostResource($post);
+    }
+
+        /**
+     * Obtener comentarios de un post
+     */
+    public function getCommentsOfAPost(Request $request)
+    {
+        $postId = $request->get('post_id');
+        $perPage = $request->get('per_page', 10);
+        
+        $comments = $this->feedService->getCommentsByPost($postId, $perPage);
+        
+        if (!$comments) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        return PostResource::collection($comments);
     }
 }
