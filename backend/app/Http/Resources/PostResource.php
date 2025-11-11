@@ -46,6 +46,8 @@ class PostResource extends JsonResource
             'created_at' => $this->created_at->toDateTimeString(),
             'user_has_reacted' => $this->user_has_reacted ?? false,
             'user_reaction_type' => $this->user_reaction_type ?? null,
+            'parent_post_id' => $this->parent_post,
+            'parent' => $this->parent ?? null,
         ];
     }
 }
