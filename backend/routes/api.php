@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/commentToAPost', [PostController::class, 'commentToAPost']);
     Route::get('/getCommentsOfAUser', [PostController::class, 'getCommentsOfAUser']);
     Route::get('/getPost', [PostController::class, 'getPost']);
+    Route::get('/getCommentsOfAPost', [PostController::class, 'getCommentsOfAPost']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
