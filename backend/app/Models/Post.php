@@ -10,7 +10,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'content', 'is_public', 'meta', 'likes_count', 'comments_count'
+        'user_id', 'content', 'is_public', 'meta', 'likes_count', 'comments_count', 'parent_post'
     ];
 
     protected $casts = [
@@ -30,6 +30,22 @@ class Post extends Model
 
     public function reactions() {
         return $this->morphMany(Reaction::class, 'reactionable');
+    }
+    
+    /**
+     * Obtener el post padre
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Post::class, 'parent_post');
+    }
+    
+    /**
+     * Obtener los posts hijos (respuestas)
+     */
+    public function replies()
+    {
+        return $this->hasMany(Post::class, 'parent_post');
     }
 
     public function bookmarks() {
