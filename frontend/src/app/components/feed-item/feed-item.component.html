@@ -1,4 +1,4 @@
-<div class="post-card">
+<div class="post-card" (click)="navigateTo('post/' + postId)">
     <div class="post-header">
         <img class="avatar" [src]="'/avatars/' + userAvatar + '.jpg' || '/avatars/default.jpg'"
             alt="{{ username }} Avatar">
@@ -17,7 +17,7 @@
     </div>
 
     <div class="post-footer">
-        <div class="reaction-container" (mouseleave)="onReactionLeave()">
+        <div class="reaction-container" (mouseleave)="onReactionLeave()" (click)="$event.stopPropagation();">
             <button (mouseenter)="showReactions = true" class="action-button like-button"
                 [class.not-liked]="!userHasReacted" [class.liked]="userHasReacted"
                 (click)="reactToPost(postId, 'like')">
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <button class="action-button comment-button" (click)="toggleInputComment()" [ngClass]="showInputComment ? 'active' : ''">
+        <button class="action-button comment-button" (click)="$event.stopPropagation(); toggleInputComment()" [ngClass]="showInputComment ? 'active' : ''">
             <img src="icons/message.svg" alt="message">
             <span class="count">{{ comments }}</span>
         </button>
@@ -57,7 +57,7 @@
             {{ commentContent }}
         </div>
     </div>
-    <div class="reply-section" *ngIf="showInputComment">
+    <div class="reply-section" *ngIf="showInputComment" (click)="$event.stopPropagation();">
     <div class="reply-header">
         <span class="reply-title">Respondiendo a {{ username }}</span>
         <span (click)="toggleInputComment()">x</span>

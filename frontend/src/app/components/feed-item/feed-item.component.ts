@@ -51,7 +51,10 @@ export class FeedItemComponent {
 
     constructor(private router: Router, private feedService: FeedService) { }
 
-    navigateTo(path: string): void {
+    navigateTo(path: string, event?: Event): void {
+        if (event) {
+            event.stopPropagation();
+        }
         this.router.navigate([path]);
     }
 
@@ -90,12 +93,48 @@ export class FeedItemComponent {
     }
 
     onReplySubmit(): void {
-        this.feedService.commentToAPost(this.postId, this.commentInput).subscribe((res: any) => {
-            this.comments = res.comments_count;
+        // this.feedService.commentToAPost(this.postId, this.commentInput).subscribe((res: any) => {
+        //     this.comments = res.comments_count;
+        //     this.showComment = false;
+        //     this.commentInput = '';
+        //     console.log('Reply submitted', this.commentInput);
+        //     console.log('Comments count', res);
+        // });
+
+        const content = {
+            content: this.commentInput,
+            is_public: true,
+            meta: null,
+            parent_post: this.postId
+        }
+
+        this.feedService.postPost(content).subscribe((res: any) => {
+            this.comments++;
             this.showComment = false;
             this.commentInput = '';
             console.log('Reply submitted', this.commentInput);
             console.log('Comments count', res);
         });
+
     }
+
+//       postPost(content: string) {
+//     if (!content) return;
+
+//     this.feedService.postPost({
+//       content: content,
+//       is_public: true,
+//       meta: null
+//     }).subscribe({
+//       next: (response) => {
+//         console.log('Post creado exitosamente', response);
+//         const textarea = document.querySelector('textarea');
+//         if (textarea) textarea.value = '';
+//         this.newPost.emit(response.post);
+//       },
+//       error: (error) => {
+//         console.error('Error al crear el post', error);
+//       }
+//     });
+//   }
 }
