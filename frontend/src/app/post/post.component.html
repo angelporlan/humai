@@ -19,5 +19,21 @@
         [userHasReacted]="post.user_has_reacted" 
         [userReactionType]="post.user_reaction_type"
     ></app-feed-item>
+    
+    <app-sharebox [isAComment]="true" [postId]="post.id"></app-sharebox>
 </div>
+
+<h3>Comentarios</h3>
+
+<div *ngIf="comments">
+    <app-comment 
+        *ngFor="let comment of comments" 
+        [comment]="comment.content" 
+        [createdAt]="comment.created_at" 
+        [username]="comment.user.username" 
+        [avatar]="comment.user.avatar" 
+        [commentId]="comment.id"
+    ></app-comment>
+</div>
+
 </section>

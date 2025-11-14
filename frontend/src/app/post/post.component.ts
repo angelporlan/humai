@@ -5,7 +5,8 @@ import { FeedItemLoaderComponent } from "../components/feed-item-loader/feed-ite
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { NgFor } from '@angular/common';
+import { ShareboxComponent } from '../home/sharebox/sharebox.component';
+import { CommentComponent } from './comment/comment.component';
 
 @Component({
   selector: 'app-post',
@@ -15,7 +16,8 @@ import { NgFor } from '@angular/common';
     FeedItemComponent,
     FeedItemLoaderComponent,
     NgIf,
-    NgFor
+    ShareboxComponent,
+    CommentComponent
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css'
@@ -23,6 +25,7 @@ import { NgFor } from '@angular/common';
 export class PostComponent {
   postId: number;
   post: any;
+  comments: any;
   firstLoad: boolean = true;
 
   constructor(
@@ -36,6 +39,7 @@ export class PostComponent {
     this.route.params.subscribe(params => {
       this.postId = +params['postId'];
       this.loadPost();
+      this.loadComments();
     });
   }
 
@@ -50,6 +54,18 @@ export class PostComponent {
       error: (error) => {
         console.error('Error loading post:', error);
         this.firstLoad = false;
+      }
+    });
+  }
+
+  loadComments(): void {
+    this.feedService.getCommentsOfAPost(this.postId).subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.comments = response.data;
+      },
+      error: (error: any) => {
+        console.error('Error loading comments:', error);
       }
     });
   }
