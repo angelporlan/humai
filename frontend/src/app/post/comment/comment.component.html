@@ -1,0 +1,13 @@
+<div class="comment-card">
+    <div class="comment-header">
+        <img class="avatar" [src]="'/avatars/' + (avatar || 'default') + '.jpg'" [alt]="username + ' avatar'">
+        <div class="user-info">
+            <h3 class="username">{{ username }}</h3>
+            <span class="date">{{ createdAt | date:'short' }}</span>
+        </div>
+    </div>
+
+    <div class="comment-content">
+        <p>{{ comment }}</p>
+    </div>
+</div>
