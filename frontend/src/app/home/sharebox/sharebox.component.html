@@ -1,9 +1,9 @@
 <section>
     <img [src]="'/avatars/' + avatar + '.jpg'" alt="avatar">
     <div class="content">
-        <textarea #post placeholder="¿Qué estás pensando?"></textarea>
+        <textarea #post [placeholder]="textDefault"></textarea>
         <div class="buttons">
-            <button (click)="postPost(post.value)">Publicar</button>
+            <button (click)="handlePost(post.value)">Publicar</button>
         </div>
     </div>
 </section>
