@@ -161,6 +161,15 @@ class FeedService
 
             $post->parent = $parent;
 
+            $post->parent->user = User::select('username', 'avatar')->find($post->parent->user_id);
+
+            if ($post->parent->reactions()->where('user_id', $user->id)->exists()) {
+                $post->parent->user_has_reacted = true;
+                $post->parent->user_reaction_type = $post->parent->reactions()->where('user_id', $user->id)->first()->type;
+            }
+
+            $post->parent->tags = $post->parent->tags()->get()->pluck('name')->toArray();
+
             return $post;
         });
 
@@ -251,18 +260,31 @@ class FeedService
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator|null
      */
-    public function getCommentsByPost(int $postId, int $perPage = 10)
+    public function getCommentsByPost(int $postId, string $username, int $perPage = 10)
     {
-        $post = Post::find($postId);
-        
-        if (!$post) {
-            return null;
-        }
-
-        return $post->comments()
-            ->with('user')
-            ->without('post')
+        $posts = Post::where('parent_post', $postId)
+            ->with(['user', 'reactions', 'tags'])
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
+
+        $requestingUser = User::where('username', $username)->first();
+
+        // get user_reaction_type and user_has_reacted
+
+        $posts->getCollection()->transform(function ($post) use ($requestingUser) {
+            $post->user_has_reacted = false;
+            $post->user_reaction_type = null;
+
+            $reaction = $post->reactions()->where('user_id', $requestingUser->id)->first();
+
+            if ($reaction) {
+                $post->user_has_reacted = true;
+                $post->user_reaction_type = $reaction->type;
+            }
+
+            return $post;
+        });
+
+        return $posts;
     }
 }
