@@ -7,30 +7,41 @@
 
   <ng-template #content>
     <ng-container *ngIf="posts.length > 0; else noPosts">
-      <app-feed-item
-        *ngFor="let post of posts"
-        [userAvatar]="post.post.user?.avatar || 'default'"
-        [username]="post.post.user?.username || ''"
-        [content]="post.post.content"
-        [date]="post.post.created_at"
-        [likes]="post.post.likes_count || 0"
-        [comments]="post.post.comments_count || 0"
-        [tags]="post.post.tags || []"
-        [postId]="post.post.id"
-        [userHasReacted]="post.post.user_has_reacted"
-        [userReactionType]="post.post.user_reaction_type"
-        [showComment]="true"
-        [commentImage]="post.user.avatar"
-        [commentUsername]="post.user.username"
-        [commentContent]="post.content"
-        [commentDate]="post.created_at"
-      ></app-feed-item>
-      
-      <div *ngIf="firstLoad" class="loading">
-        <p>Cargando más publicaciones...</p>
-      </div>
-      <div *ngIf="nextPageUrl" class="load-more">
-        <button (click)="getPosts(nextPageUrl)">Cargar más</button>
+      <div *ngFor="let comment of posts" class="comment-container">
+                <div class="parent-post" *ngIf="comment.parent">
+
+          <app-feed-item
+            [userAvatar]="comment.parent.user?.avatar || 'default'"
+            [username]="comment.parent.user?.username || ''"
+            [content]="comment.parent.content"
+            [date]="comment.parent.created_at"
+            [likes]="comment.parent.likes_count || 0"
+            [comments]="comment.parent.comments_count || 0"
+            [tags]="comment.parent.tags || []"
+            [postId]="comment.parent.id"
+            [userHasReacted]="comment.parent.user_has_reacted"
+            [userReactionType]="comment.parent.user_reaction_type">
+          </app-feed-item>
+        </div>
+                  <div class="parent-post-header">
+            <span>Respondiendo a {{comment.parent.user?.username}}:</span>
+          </div>
+          <div class="post">
+                    <app-feed-item class="s"
+          [userAvatar]="comment.user?.avatar || 'default'"
+          [username]="comment.user?.username || ''"
+          [content]="comment.content"
+          [date]="comment.created_at"
+          [likes]="comment.likes_count || 0"
+          [comments]="comment.comments_count || 0"
+          [tags]="comment.tags || []"
+          [postId]="comment.id"
+          [userHasReacted]="comment.user_has_reacted"
+          [userReactionType]="comment.user_reaction_type">
+        </app-feed-item>
+          </div>
+        
+
       </div>
     </ng-container>
   </ng-template>
