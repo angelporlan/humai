@@ -101,7 +101,8 @@ export class FeedService {
 
   getCommentsOfAPost(postId: number): Observable<any> {
     const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
-    return this.http.get(`${this.apiUrl}/getCommentsOfAPost?post_id=${postId}`, {
+    const username = JSON.parse(localStorage.getItem('humai') || '{}').username;
+    return this.http.get(`${this.apiUrl}/getCommentsOfAPost?post_id=${postId}&username=${username}`, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`
       })
