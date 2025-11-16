@@ -163,10 +163,11 @@ class PostController extends Controller
     public function getCommentsOfAPost(Request $request)
     {
         $postId = $request->get('post_id');
+        $username = $request->get('username');
         $perPage = $request->get('per_page', 10);
         
-        $comments = $this->feedService->getCommentsByPost($postId, $perPage);
-        
+        $comments = $this->feedService->getCommentsByPost($postId, $username, $perPage);
+
         if (!$comments) {
             return response()->json([
                 'success' => false,
