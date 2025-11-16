@@ -1,0 +1,29 @@
+.parent-post-header {
+    padding-left: 24px;
+    border-left: 4px solid var(--color-secondary);
+}
+
+.post {
+    position: relative;
+    padding-left: 24px;
+}
+
+.post::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -20px;
+    bottom: 50%;
+    width: 4px;
+    background-color: var(--color-secondary);
+}
+
+.post::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 4px;
+    width: 15px;
+    background-color: var(--color-secondary);
+}
