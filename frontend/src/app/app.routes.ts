@@ -16,6 +16,10 @@ export const routes: Routes = [
                 loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
             },
             {
+                path: 'explore',
+                loadComponent: () => import('./explore/explore.component').then(m => m.ExploreComponent)
+            },
+            {
                 path: 'post/:postId',
                 loadComponent: () => import('./post/post.component').then(m => m.PostComponent)
             },
