@@ -69,6 +69,43 @@ class FeedService
     /**
      * Toggle a reaction to a post
      */
+    /**
+     * Create a new post or comment
+     */
+    public function createPost(User $user, array $data)
+    {
+        try {
+            $post = Post::create([
+                'user_id' => $user->id,
+                'content' => $data['content'],
+                'is_public' => $data['is_public'] ?? true,
+                'meta' => $data['meta'] ?? null,
+                'parent_post' => $data['parent_post'] ?? null,
+            ]);
+
+            if (!empty($data['parent_post'])) {
+                Post::where('id', $data['parent_post'])->increment('comments_count');
+            }
+
+            $post->load('user:id,username,avatar');
+
+            $post->comments_count = 0;
+            $post->likes_count = 0;
+
+            return [
+                'success' => true,
+                'message' => $data['parent_post'] ? 'Comment created successfully' : 'Post created successfully',
+                'post' => $post
+            ];
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error creating post: ' . $e->getMessage(),
+                'status' => 500
+            ];
+        }
+    }
+
     public function togglePostReaction(User $user, int $postId, string $reactionType = 'like')
     {
         $post = Post::find($postId);
