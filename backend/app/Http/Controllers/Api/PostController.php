@@ -30,29 +30,13 @@ class PostController extends Controller
             'parent_post' => 'nullable|exists:posts,id'
         ]);
 
-        try {
-            $user = $request->user();
-            $post = Post::create([
-                'user_id' => $user->id,
-                'content' => $validated['content'],
-                'is_public' => $validated['is_public'] ?? true,
-                'meta' => $validated['meta'] ?? null,
-                'parent_post' => $validated['parent_post'] ?? null,
-            ]);
+        $user = $request->user();
+        $result = $this->feedService->createPost($user, $validated);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Post created successfully',
-                'post' => $post
-            ], 201);
-
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error creating post',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json(
+            $result,
+            $result['success'] ? 201 : ($result['status'] ?? 500)
+        );
     }
 
     /**
