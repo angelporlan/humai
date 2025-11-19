@@ -2,25 +2,16 @@
   <ng-container *ngIf="firstLoad; else content">
     <app-feed-item-loader></app-feed-item-loader>
     <app-feed-item-loader></app-feed-item-loader>
-    <app-feed-item-loader></app-feed-item-loader>
   </ng-container>
 
   <ng-template #content>
     <ng-container *ngIf="posts.length > 0; else noPosts">
-      <app-feed-item
-        *ngFor="let post of posts"
-        [userAvatar]="post.user?.avatar || 'default.jpg'"
-        [username]="post.user?.username || ''"
-        [content]="post.content"
-        [date]="post.created_at"
-        [likes]="post.likes_count || 0"
-        [comments]="post.comments_count || 0"
-        [tags]="post.tags || []"
-        [postId]="post.id"
-        [userHasReacted]="post.user_has_reacted"
-        [userReactionType]="post.user_reaction_type"
-      ></app-feed-item>
-      
+      <app-feed-item *ngFor="let post of posts" [userAvatar]="post.user?.avatar || 'default.jpg'"
+        [username]="post.user?.username || ''" [content]="post.content" [date]="post.created_at"
+        [likes]="post.likes_count || 0" [comments]="post.comments_count || 0" [tags]="post.tags || []"
+        [postId]="post.id" [userHasReacted]="post.user_has_reacted"
+        [userReactionType]="post.user_reaction_type"></app-feed-item>
+
       <div *ngIf="firstLoad" class="loading">
         <p>Cargando más publicaciones...</p>
       </div>
@@ -29,7 +20,7 @@
       </div>
     </ng-container>
   </ng-template>
-  
+
   <ng-template #noPosts>
     <div class="no-posts">
       <p>No hay publicaciones para mostrar</p>
