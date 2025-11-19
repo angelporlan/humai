@@ -43,6 +43,14 @@ export const routes: Routes = [
                     {
                         path: 'comments',
                         loadComponent: () => import('./profile/comments/comments.component').then(m => m.CommentsComponent)
+                    },
+                    {
+                        path: 'followers',
+                        loadComponent: () => import('./profile/followers/followers.component').then(m => m.FollowersComponent)
+                    },
+                    {
+                        path: 'following',
+                        loadComponent: () => import('./profile/following/following.component').then(m => m.FollowingComponent)
                     }
                 ]
             }
