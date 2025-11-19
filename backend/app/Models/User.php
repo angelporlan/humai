@@ -93,4 +93,17 @@ class User extends Authenticatable
             ->where('reactionable_type', 'App\\Models\\Post')
             ->exists();
     }
+
+    /**
+     * Check if the user is following another user
+     *
+     * @param \App\Models\User $user
+     * @return bool
+     */
+    public function isFollowing(User $user): bool
+    {
+        return $this->following()
+            ->where('followee_id', $user->id)
+            ->exists();
+    }
 }
