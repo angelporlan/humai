@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FeedService } from '../../services/feed.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sharebox',
@@ -15,7 +16,7 @@ export class ShareboxComponent {
   avatar = 'default';
   textDefault = '¿Qué estás pensando?';
 
-  constructor(private feedService: FeedService) { }
+  constructor(private feedService: FeedService, private router: Router) { }
 
   ngOnInit() {
     this.avatar = JSON.parse(localStorage.getItem('humai') || '{}').avatar || 'default';
@@ -25,20 +26,11 @@ export class ShareboxComponent {
   handlePost(content: string) {
     if (!content) return;
 
-    if (this.isAComment) {
-      this.postComment(content);
-    } else {
-      this.postPost(content);
-    }
-  }
-
-  postPost(content: string) {
-    if (!content) return;
-
     this.feedService.postPost({
       content: content,
       is_public: true,
-      meta: null
+      meta: null,
+      ...(this.isAComment && { parent_post: this.postId }),
     }).subscribe({
       next: (response) => {
         console.log('Post creado exitosamente', response);
@@ -52,19 +44,4 @@ export class ShareboxComponent {
     });
   }
 
-  postComment(content: string) {
-    if (!content) return;
-
-    this.feedService.commentToAPost(this.postId, content).subscribe({
-      next: (response) => {
-        console.log('Comentario creado exitosamente', response);
-        const textarea = document.querySelector('textarea');
-        if (textarea) textarea.value = '';
-        this.newPost.emit(response.post);
-      },
-      error: (error) => {
-        console.error('Error al crear el comentario', error);
-      }
-    });
-  }
 }
