@@ -74,6 +74,8 @@ class AuthController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
+        $isFollowing = $request->user()->isFollowing($user);
+
         return response()->json([
             'id' => $user->id,
             'username' => $user->username,
@@ -84,11 +86,100 @@ class AuthController extends Controller
             'followers_count' => $user->followers_count,
             'following_count' => $user->following_count,
             'posts_count' => $user->posts_count,
+            'is_following' => $isFollowing,
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at
         ]);
     }
     
+
+    public function follow(Request $request)
+    {
+        $validated = $request->validate([
+            'username' => 'required|string|max:50',
+        ]);
+
+        $userToFollow = User::where('username', $validated['username'])->first();
+
+        if (!$userToFollow) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        if ($request->user()->id === $userToFollow->id) {
+            return response()->json(['message' => 'You cannot follow yourself'], 400);
+        }
+
+        if ($request->user()->isFollowing($userToFollow)) {
+            return response()->json(['message' => 'Already following this user'], 400);
+        }
+
+        $request->user()->following()->attach($userToFollow->id);
+
+        return response()->json([
+            'message' => 'Successfully followed user',
+            'is_following' => true
+        ]);
+    }
+
+    public function unfollow(Request $request)
+    {
+        $validated = $request->validate([
+            'username' => 'required|string|max:50',
+        ]);
+
+        $userToUnfollow = User::where('username', $validated['username'])->first();
+
+        if (!$userToUnfollow) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        if (!$request->user()->isFollowing($userToUnfollow)) {
+            return response()->json(['message' => 'Not following this user'], 400);
+        }
+
+        $request->user()->following()->detach($userToUnfollow->id);
+
+        return response()->json([
+            'message' => 'Successfully unfollowed user',
+            'is_following' => false
+        ]);
+    }
+
+    public function getFollowers(Request $request, $username)
+    {
+        $user = User::where('username', $username)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $followers = $user->followers()->select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')->get();
+
+        $currentUser = $request->user();
+        $followers->each(function ($follower) use ($currentUser) {
+            $follower->is_following = $currentUser ? $currentUser->isFollowing($follower) : false;
+        });
+
+        return response()->json($followers);
+    }
+
+    public function getFollowing(Request $request, $username)
+    {
+        $user = User::where('username', $username)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $following = $user->following()->select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')->get();
+
+        $currentUser = $request->user();
+        $following->each(function ($followedUser) use ($currentUser) {
+            $followedUser->is_following = $currentUser ? $currentUser->isFollowing($followedUser) : false;
+        });
+
+        return response()->json($following);
+    }
 
     public function logout(Request $request)
     {
