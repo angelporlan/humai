@@ -27,6 +27,22 @@ export class FeedService {
     });
   }
 
+  getExploreFeed(url?: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    if (url) {
+      return this.http.get(`${url}`, {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        })
+      });
+    }
+    return this.http.get(`${this.apiUrl}/explore`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
+
   getPostsOfAUser(username: string, url?: string): Observable<any> {
     const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
     if (url) {
