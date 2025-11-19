@@ -49,6 +49,19 @@ class FeedService
     }
 
     /**
+     * Get global feed for explore feature
+     */
+    public function getGlobalFeed(User $user, int $perPage = 10)
+    {
+        $posts = Post::with(['user', 'comments', 'reactions', 'tags'])
+            ->where('parent_post', null)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        return $this->addUserReactionInfo($posts, $user->id);
+    }
+
+    /**
      * Add user reaction information to a collection of posts
      */
     private function addUserReactionInfo($posts, $userId)
