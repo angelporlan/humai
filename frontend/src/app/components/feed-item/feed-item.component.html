@@ -3,7 +3,8 @@
         <img class="avatar" [src]="'/avatars/' + userAvatar + '.jpg' || '/avatars/default.jpg'"
             alt="{{ username }} Avatar">
         <div class="user-info">
-            <h2 class="username" (click)="navigateTo('profile/' + username)">{{ username }}</h2>
+            <h2 class="username" (click)="$event.stopPropagation(); navigateTo('profile/' + username)">{{ username }}
+            </h2>
             <span class="date">{{ date | date:'short' }}</span>
         </div>
     </div>
@@ -35,7 +36,8 @@
             </div>
         </div>
 
-        <button class="action-button comment-button" (click)="$event.stopPropagation(); toggleInputComment()" [ngClass]="showInputComment ? 'active' : ''">
+        <button class="action-button comment-button" (click)="$event.stopPropagation(); toggleInputComment()"
+            [ngClass]="showInputComment ? 'active' : ''">
             <img src="icons/message.svg" alt="message">
             <span class="count">{{ comments }}</span>
         </button>
@@ -58,24 +60,19 @@
         </div>
     </div>
     <div class="reply-section" *ngIf="showInputComment" (click)="$event.stopPropagation();">
-    <div class="reply-header">
-        <span class="reply-title">Respondiendo a {{ username }}</span>
-        <span (click)="toggleInputComment()">x</span>
-    </div>
-    <div class="reply-input">
-        <textarea 
-            class="reply-textarea" 
-            placeholder="Escribe tu respuesta..."
-            [(ngModel)]="commentInput"
-            (keydown.enter)="$event.preventDefault(); onReplySubmit()">
+        <div class="reply-header">
+            <span class="reply-title">Respondiendo a {{ username }}</span>
+            <span (click)="toggleInputComment()">x</span>
+        </div>
+        <div class="reply-input">
+            <textarea class="reply-textarea" placeholder="Escribe tu respuesta..." [(ngModel)]="commentInput"
+                (keydown.enter)="$event.preventDefault(); onReplySubmit()">
         </textarea>
-        <div class="reply-actions">
-            <button class="reply-submit" (click)="onReplySubmit()">
-                <span>Enviar</span>
-                <i class="fas fa-paper-plane"></i>
-            </button>
+            <div class="reply-actions">
+                <button class="reply-submit" (click)="onReplySubmit()">
+                    <span>Enviar</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
     </div>
-</div>
-
-
