@@ -22,7 +22,7 @@ export class CommentsComponent {
   constructor(
     private route: ActivatedRoute,
     private feedService: FeedService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.parent?.paramMap.subscribe(params => {
@@ -47,17 +47,17 @@ export class CommentsComponent {
       console.log('Ya hay una petición en curso');
       return;
     }
-    
+
     this.loading = true;
     console.log('Cargando posts...', url || 'primera página');
-    
+
     this.feedService.getCommentsOfAUser(this.username, url).subscribe({
       next: (response: any) => {
         console.log('Respuesta recibida:', response);
+        this.firstLoad = false;
         if (response.data && response.data.length > 0) {
           this.posts = [...this.posts, ...response.data];
           this.nextPageUrl = response.links?.next;
-          this.firstLoad = false;
           console.log('Total posts:', this.posts.length);
           console.log('Next page URL:', this.nextPageUrl);
         } else {
@@ -80,20 +80,20 @@ export class CommentsComponent {
     if (this.loading || !this.nextPageUrl) {
       return;
     }
-    
+
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
-    
+
     const distanceFromBottom = documentHeight - (scrollTop + windowHeight);
-    
+
     // console.log('Scroll info:', {
     //   scrollTop,
     //   windowHeight,
     //   documentHeight,
     //   distanceFromBottom
     // });
-    
+
     if (distanceFromBottom < 300) {
       console.log('¡Cargando más posts!');
       this.getPosts(this.nextPageUrl);
