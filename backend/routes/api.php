@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AiContentController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -11,6 +12,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::get('/feed', [PostController::class, 'feed']);
+    Route::get('/explore', [PostController::class, 'explore']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/getInfoOfAUsername', [AuthController::class, 'getInfoOfAUsername']);
@@ -22,7 +24,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/getCommentsOfAUser', [PostController::class, 'getCommentsOfAUser']);
     Route::get('/getPost', [PostController::class, 'getPost']);
     Route::get('/getCommentsOfAPost', [PostController::class, 'getCommentsOfAPost']);
+    Route::post('/follow', [AuthController::class, 'follow']);
+    Route::post('/unfollow', [AuthController::class, 'unfollow']);
+    Route::get('/users/{username}/followers', [AuthController::class, 'getFollowers']);
+    Route::get('/users/{username}/following', [AuthController::class, 'getFollowing']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/aiContent', [AiContentController::class, 'index']);
+
+
