@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { ShareboxComponent } from '../home/sharebox/sharebox.component';
-import { CommentComponent } from './comment/comment.component';
 
 @Component({
   selector: 'app-post',
@@ -17,7 +16,6 @@ import { CommentComponent } from './comment/comment.component';
     FeedItemLoaderComponent,
     NgIf,
     ShareboxComponent,
-    CommentComponent
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css'
@@ -72,5 +70,10 @@ export class PostComponent {
 
   goBack(): void {
     window.history.back();
+  }
+
+  addNewComment(comment: any): void {
+    console.log(comment);
+    this.comments.unshift(comment);
   }
 }
