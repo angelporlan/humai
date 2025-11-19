@@ -2,40 +2,47 @@
     <section>
         <app-profile-loader *ngIf="loading"></app-profile-loader>
         <div *ngIf="!loading" class="profile-header">
-                    <div class="profile-picture">
-            <img [src]="'/avatars/' + avatar + '.jpg' || '/avatars/default.jpg'" [alt]="name || 'Usuario'">
-        </div>
-        <div class="profile-info">
-            <h2>{{ name || 'Nombre de usuario' }}</h2>
-            <p class="username">{{'@' + username }}</p>
-            <p class="bio">{{ bio || 'No hay biografía disponible' }}</p>
-            
-            <div class="stats">
-                <div>
-                    <span class="count">{{ posts_count || 0 }}</span>
-                    <span>Publicaciones</span>
-                </div>
-                <div>
-                    <span class="count">{{ followers_count || 0 }}</span>
-                    <span>Seguidores</span>
-                </div>
-                <div>
-                    <span class="count">{{ following_count || 0 }}</span>
-                    <span>Siguiendo</span>
-                </div>
+            <div class="profile-picture">
+                <img [src]="'/avatars/' + avatar + '.jpg' || '/avatars/default.jpg'" [alt]="name || 'Usuario'">
             </div>
-            
-            <button class="follow-button">Seguir</button>
-        </div>
+            <div class="profile-info">
+                <h2>{{ name || 'Nombre de usuario' }}</h2>
+                <p class="username">{{'@' + username }}</p>
+                <p class="bio">{{ bio || 'No hay biografía disponible' }}</p>
+
+                <div class="stats">
+                    <div>
+                        <span class="count">{{ posts_count || 0 }}</span>
+                        <span>Publicaciones</span>
+                    </div>
+                    <div [routerLink]="['/profile', username, 'followers']" class="clickable-stat">
+                        <span class="count">{{ followers_count || 0 }}</span>
+                        <span>Seguidores</span>
+                    </div>
+                    <div [routerLink]="['/profile', username, 'following']" class="clickable-stat">
+                        <span class="count">{{ following_count || 0 }}</span>
+                        <span>Siguiendo</span>
+                    </div>
+                </div>
+
+                <button *ngIf="!loading && isOwnProfile" class="edit-profile-button">Editar Perfil</button>
+                <button *ngIf="!loading && !isOwnProfile && !isFollowing" class="follow-button"
+                    (click)="followUser()">Seguir</button>
+                <button *ngIf="!loading && !isOwnProfile && isFollowing" class="unfollow-button"
+                    (click)="unfollowUser()">Dejar de
+                    seguir</button>
+            </div>
         </div>
         <div class="tablist">
             <button class="toggle-button" [class.toggle-active]="activeTab === 'posts'" (click)="changeUrl('posts')">
                 Publicaciones
             </button>
-            <button class="toggle-button" [class.toggle-active]="activeTab === 'reactions'" (click)="changeUrl('reactions')">
+            <button class="toggle-button" [class.toggle-active]="activeTab === 'reactions'"
+                (click)="changeUrl('reactions')">
                 Reacciones
             </button>
-            <button class="toggle-button" [class.toggle-active]="activeTab === 'comments'" (click)="changeUrl('comments')">
+            <button class="toggle-button" [class.toggle-active]="activeTab === 'comments'"
+                (click)="changeUrl('comments')">
                 Comentarios
             </button>
         </div>

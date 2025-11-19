@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
+import { AuthService } from '../services/auth.service';
 import { ProfileLoaderComponent } from './profile-loader/profile-loader.component';
 
 @Component({
@@ -11,7 +12,7 @@ import { ProfileLoaderComponent } from './profile-loader/profile-loader.componen
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   username: string = '';
   avatar: string = '';
   name: string = '';
@@ -22,24 +23,34 @@ export class ProfileComponent {
   posts: any[] = [];
   activeTab: string = 'posts';
   loading = false;
+  isFollowing: boolean = false;
+  isOwnProfile: boolean = false;
+  currentUsername: string = '';
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService, private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private profileService: ProfileService,
+    private router: Router,
+    private authService: AuthService
+  ) { }
 
   ngOnInit(): void {
-    this.username = this.route.snapshot.paramMap.get('username')!;
-    this.loadProfileData();
-    
+    this.route.paramMap.subscribe(params => {
+      this.username = params.get('username')!;
+      this.loadProfileData();
+    });
+
     this.updateActiveTabFromUrl();
-    
+
     this.route.url.subscribe(() => {
       this.updateActiveTabFromUrl();
     });
   }
-  
+
   private updateActiveTabFromUrl(): void {
     const segments = this.router.url.split('/');
     const lastSegment = segments[segments.length - 1];
-    if (['reactions', 'comments', 'posts'].includes(lastSegment)) {
+    if (['reactions', 'comments', 'posts', 'followers', 'following'].includes(lastSegment)) {
       this.activeTab = lastSegment;
     } else {
       this.activeTab = 'posts';
@@ -60,8 +71,36 @@ export class ProfileComponent {
       this.followers_count = response.followers_count;
       this.following_count = response.following_count;
       this.posts_count = response.posts_count;
+      this.isFollowing = response.is_following;
       this.loading = false;
+
+      this.currentUsername = JSON.parse(localStorage.getItem('humai') || '{}').username;
+      this.isOwnProfile = this.username === this.currentUsername;
     });
+  }
+
+  followUser() {
+    this.profileService.followUser(this.username).subscribe(
+      (response: any) => {
+        this.isFollowing = true;
+        this.followers_count++;
+      },
+      (error: any) => {
+        console.error('Error following user:', error);
+      }
+    );
+  }
+
+  unfollowUser() {
+    this.profileService.unfollowUser(this.username).subscribe(
+      (response: any) => {
+        this.isFollowing = false;
+        this.followers_count--;
+      },
+      (error: any) => {
+        console.error('Error unfollowing user:', error);
+      }
+    );
   }
 
   changeUrl(tab: string) {
