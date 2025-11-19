@@ -52,6 +52,19 @@ class PostController extends Controller
         return PostResource::collection($posts);
     }
 
+    /**
+     * Devuelve el feed global para explorar
+     */
+    public function explore(Request $request)
+    {
+        $user = $request->user();
+        $perPage = $request->get('per_page', 10);
+
+        $posts = $this->feedService->getGlobalFeed($user, $perPage);
+
+        return PostResource::collection($posts);
+    }
+
     public function getPostsOfAUser(Request $request)
     {
         $username = $request->get('username');
