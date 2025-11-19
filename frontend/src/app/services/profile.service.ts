@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +31,43 @@ export class ProfileService {
       params: { username },
       headers: headers
     });
+  }
+
+  followUser(username: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${this.apiUrl}/follow`,
+      { username },
+      { headers: headers }
+    );
+  }
+
+  unfollowUser(username: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${this.apiUrl}/unfollow`,
+      { username },
+      { headers: headers }
+    );
+  }
+
+  getFollowers(username: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/users/${username}/followers`, { headers: headers });
+  }
+
+  getFollowing(username: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/users/${username}/following`, { headers: headers });
   }
 }
