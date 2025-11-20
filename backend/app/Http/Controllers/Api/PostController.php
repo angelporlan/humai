@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Services\FeedService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
@@ -46,8 +47,13 @@ class PostController extends Controller
     {
         $user = $request->user();
         $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
 
-        $posts = $this->feedService->getFeed($user, $perPage);
+        $cacheKey = "feed_user_{$user->id}_page_{$page}_per_page_{$perPage}";
+
+        $posts = Cache::remember($cacheKey, 60 * 5, function () use ($user, $perPage) {
+            return $this->feedService->getFeed($user, $perPage);
+        });
 
         return PostResource::collection($posts);
     }
@@ -59,8 +65,13 @@ class PostController extends Controller
     {
         $user = $request->user();
         $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
 
-        $posts = $this->feedService->getGlobalFeed($user, $perPage);
+        $cacheKey = "explore_user_{$user->id}_page_{$page}_per_page_{$perPage}";
+
+        $posts = Cache::remember($cacheKey, 60 * 10, function () use ($user, $perPage) {
+            return $this->feedService->getGlobalFeed($user, $perPage);
+        });
 
         return PostResource::collection($posts);
     }
@@ -69,9 +80,14 @@ class PostController extends Controller
     {
         $username = $request->get('username');
         $perPage = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
         $requestingUser = $request->user();
         
-        $posts = $this->feedService->getPostsByUser($requestingUser, $username, $perPage);
+        $cacheKey = "user_posts_{$username}_by_{$requestingUser->id}_page_{$page}_per_page_{$perPage}";
+
+        $posts = Cache::remember($cacheKey, 60 * 5, function () use ($requestingUser, $username, $perPage) {
+            return $this->feedService->getPostsByUser($requestingUser, $username, $perPage);
+        });
         
         if (!$posts) {
             return response()->json([
@@ -142,7 +158,12 @@ class PostController extends Controller
     {
         $postId = $request->get('post_id');
         $user = $request->user();
-        $post = $this->feedService->getPost($postId, $user);
+
+        $cacheKey = "post_{$postId}_user_{$user->id}";
+
+        $post = Cache::remember($cacheKey, 60 * 10, function () use ($postId, $user) {
+            return $this->feedService->getPost($postId, $user);
+        });
         
         if (!$post) {
             return response()->json([
