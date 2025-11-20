@@ -1,6 +1,6 @@
 <div class="box">
     <ul class="list-unstyled components">
-            <img src="h.png" alt="logo" class="logo" (click)="navigateTo('home')">
+        <img src="h.png" alt="logo" class="logo" (click)="navigateTo('home')">
         <li [ngClass]="{ 'active': isActive('home') }" (click)="navigateTo('home')">
             <img class="icons" src="icons/home.svg" alt="svg">
             <span>Inicio</span>
@@ -17,7 +17,7 @@
             <img class="icons" src="icons/user.svg" alt="svg">
             <span>Perfil</span>
         </li>
-        <li [ngClass]="{ 'active': isActive('recipe') }" (click)="navigateTo('recipe')">
+        <li [ngClass]="{ 'active': isActive('settings') }" (click)="navigateTo('settings')">
             <img class="icons" src="icons/settings.svg" alt="svg">
             <span>Configuración</span>
         </li>
