@@ -53,6 +53,10 @@ export const routes: Routes = [
                         loadComponent: () => import('./profile/following/following.component').then(m => m.FollowingComponent)
                     }
                 ]
+            },
+            {
+                path: 'settings',
+                loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent)
             }
         ]
     },
