@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
 
 class AuthController extends Controller
 {
@@ -66,30 +67,40 @@ class AuthController extends Controller
             'username' => 'required|string|max:50',
         ]);
 
-        $user = User::where('username', $validated['username'])
-            ->withCount(['followers', 'following', 'posts'])
-            ->first();
+        $cacheKey = "user_info_{$validated['username']}_requester_" . ($request->user() ? $request->user()->id : 'guest');
 
-        if (!$user) {
+        $userData = Cache::remember($cacheKey, 60 * 5, function () use ($validated, $request) {
+            $user = User::where('username', $validated['username'])
+                ->withCount(['followers', 'following', 'posts'])
+                ->first();
+
+            if (!$user) {
+                return null;
+            }
+
+            $isFollowing = $request->user() ? $request->user()->isFollowing($user) : false;
+
+            return [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'name' => $user->name,
+                'avatar' => $user->avatar,
+                'bio' => $user->bio,
+                'followers_count' => $user->followers_count,
+                'following_count' => $user->following_count,
+                'posts_count' => $user->posts_count,
+                'is_following' => $isFollowing,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at
+            ];
+        });
+
+        if (!$userData) {
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        $isFollowing = $request->user()->isFollowing($user);
-
-        return response()->json([
-            'id' => $user->id,
-            'username' => $user->username,
-            'email' => $user->email,
-            'name' => $user->name,
-            'avatar' => $user->avatar,
-            'bio' => $user->bio,
-            'followers_count' => $user->followers_count,
-            'following_count' => $user->following_count,
-            'posts_count' => $user->posts_count,
-            'is_following' => $isFollowing,
-            'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at
-        ]);
+        return response()->json($userData);
     }
     
 
@@ -147,36 +158,56 @@ class AuthController extends Controller
 
     public function getFollowers(Request $request, $username)
     {
-        $user = User::where('username', $username)->first();
+        $cacheKey = "user_followers_{$username}_requester_" . ($request->user() ? $request->user()->id : 'guest');
 
-        if (!$user) {
+        $followers = Cache::remember($cacheKey, 60 * 5, function () use ($username, $request) {
+            $user = User::where('username', $username)->first();
+
+            if (!$user) {
+                return null;
+            }
+
+            $followers = $user->followers()->select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')->get();
+
+            $currentUser = $request->user();
+            $followers->each(function ($follower) use ($currentUser) {
+                $follower->is_following = $currentUser ? $currentUser->isFollowing($follower) : false;
+            });
+
+            return $followers;
+        });
+
+        if (!$followers) {
             return response()->json(['message' => 'User not found'], 404);
         }
-
-        $followers = $user->followers()->select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')->get();
-
-        $currentUser = $request->user();
-        $followers->each(function ($follower) use ($currentUser) {
-            $follower->is_following = $currentUser ? $currentUser->isFollowing($follower) : false;
-        });
 
         return response()->json($followers);
     }
 
     public function getFollowing(Request $request, $username)
     {
-        $user = User::where('username', $username)->first();
+        $cacheKey = "user_following_{$username}_requester_" . ($request->user() ? $request->user()->id : 'guest');
 
-        if (!$user) {
+        $following = Cache::remember($cacheKey, 60 * 5, function () use ($username, $request) {
+            $user = User::where('username', $username)->first();
+
+            if (!$user) {
+                return null;
+            }
+
+            $following = $user->following()->select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')->get();
+
+            $currentUser = $request->user();
+            $following->each(function ($followedUser) use ($currentUser) {
+                $followedUser->is_following = $currentUser ? $currentUser->isFollowing($followedUser) : false;
+            });
+
+            return $following;
+        });
+
+        if (!$following) {
             return response()->json(['message' => 'User not found'], 404);
         }
-
-        $following = $user->following()->select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')->get();
-
-        $currentUser = $request->user();
-        $following->each(function ($followedUser) use ($currentUser) {
-            $followedUser->is_following = $currentUser ? $currentUser->isFollowing($followedUser) : false;
-        });
 
         return response()->json($following);
     }
