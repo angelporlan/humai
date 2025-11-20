@@ -28,6 +28,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/unfollow', [AuthController::class, 'unfollow']);
     Route::get('/users/{username}/followers', [AuthController::class, 'getFollowers']);
     Route::get('/users/{username}/following', [AuthController::class, 'getFollowing']);
+    
+    // Settings routes
+    Route::get('/settings', [App\Http\Controllers\Api\SettingsController::class, 'getSettings']);
+    Route::put('/settings/profile', [App\Http\Controllers\Api\SettingsController::class, 'updateProfile']);
+    Route::put('/settings/privacy', [App\Http\Controllers\Api\SettingsController::class, 'updatePrivacySettings']);
+    Route::put('/settings/notifications', [App\Http\Controllers\Api\SettingsController::class, 'updateNotificationSettings']);
+    Route::put('/settings/password', [App\Http\Controllers\Api\SettingsController::class, 'changePassword']);
+    Route::delete('/settings/account', [App\Http\Controllers\Api\SettingsController::class, 'deleteAccount']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
