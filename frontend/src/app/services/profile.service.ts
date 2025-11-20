@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +8,10 @@ import { Observable } from 'rxjs';
 export class ProfileService {
 
   private apiUrl = 'http://127.0.0.1:8000/api';
+
+  // Subject para notificar cambios en follows
+  private followChangeSubject = new Subject<{ username: string, action: 'follow' | 'unfollow' }>();
+  public followChange$ = this.followChangeSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -69,5 +73,9 @@ export class ProfileService {
       'Authorization': `Bearer ${token}`
     });
     return this.http.get(`${this.apiUrl}/users/${username}/following`, { headers: headers });
+  }
+
+  notifyFollowChange(username: string, action: 'follow' | 'unfollow') {
+    this.followChangeSubject.next({ username, action });
   }
 }
