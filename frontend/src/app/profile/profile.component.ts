@@ -35,6 +35,8 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.currentUsername = JSON.parse(localStorage.getItem('humai') || '{}').username;
+
     this.route.paramMap.subscribe(params => {
       this.username = params.get('username')!;
       this.loadProfileData();
@@ -44,6 +46,30 @@ export class ProfileComponent implements OnInit {
 
     this.route.url.subscribe(() => {
       this.updateActiveTabFromUrl();
+    });
+
+    this.profileService.followChange$.subscribe(change => {
+      console.log('Follow change detected:', change, 'Current profile:', this.username);
+
+      if (change.username === this.username) {
+        if (change.action === 'follow') {
+          this.followers_count++;
+          console.log('Incrementing followers count:', this.followers_count);
+        } else if (change.action === 'unfollow') {
+          this.followers_count--;
+          console.log('Decrementing followers count:', this.followers_count);
+        }
+      }
+
+      if (this.isOwnProfile) {
+        if (change.action === 'follow') {
+          this.following_count++;
+          console.log('Incrementing following count:', this.following_count);
+        } else if (change.action === 'unfollow') {
+          this.following_count--;
+          console.log('Decrementing following count:', this.following_count);
+        }
+      }
     });
   }
 
