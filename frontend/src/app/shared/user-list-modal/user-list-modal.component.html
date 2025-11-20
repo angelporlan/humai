@@ -1,0 +1,24 @@
+<div class="modal-overlay" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h3>{{ title }}</h3>
+            <button class="close-button" (click)="close()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div *ngIf="loading" class="loading-spinner">Cargando...</div>
+            <ul *ngIf="!loading" class="user-list">
+                <li *ngFor="let user of users" class="user-item">
+                    <a [routerLink]="['/profile', user.username]" (click)="close()" class="user-link">
+                        <img [src]="'/avatars/' + user.avatar + '.jpg' || '/avatars/default.jpg'" [alt]="user.name"
+                            class="user-avatar">
+                        <div class="user-info">
+                            <span class="user-name">{{ user.name }}</span>
+                            <span class="user-username">{{ '@' + user.username }}</span>
+                        </div>
+                    </a>
+                </li>
+                <li *ngIf="users.length === 0" class="no-users">No hay usuarios para mostrar.</li>
+            </ul>
+        </div>
+    </div>
+</div>
