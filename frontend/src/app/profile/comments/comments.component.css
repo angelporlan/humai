@@ -27,3 +27,9 @@
     width: 15px;
     background-color: var(--color-secondary);
 }
+
+.no-posts {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
