@@ -14,12 +14,28 @@ img {
     object-fit: cover;
 }
 
+div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+}
+
 p {
     margin: 0;
     font-size: 15px;
     font-weight: 600;
     color: var(--text-primary, #e7e9ea);
     flex: 1;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.bio {
+    font-size: 13px;
+    color: var(--text-secondary, #bfc2c5);
 }
 
 :host:not(:last-child) article {
@@ -46,12 +62,12 @@ button {
     article {
         padding: 10px 12px;
     }
-    
+
     img {
         width: 40px;
         height: 40px;
     }
-    
+
     p {
         font-size: 14px;
     }
