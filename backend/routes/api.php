@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AiContentController;
+use App\Http\Controllers\Api\RecommendationsController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -36,6 +37,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/settings/notifications', [App\Http\Controllers\Api\SettingsController::class, 'updateNotificationSettings']);
     Route::put('/settings/password', [App\Http\Controllers\Api\SettingsController::class, 'changePassword']);
     Route::delete('/settings/account', [App\Http\Controllers\Api\SettingsController::class, 'deleteAccount']);
+    
+    // Recommendations routes
+    Route::get('/recommendations/users', [RecommendationsController::class, 'getSuggestedUsers']);
+    Route::get('/recommendations/trending', [RecommendationsController::class, 'getTrendingTopics']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
