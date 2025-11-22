@@ -1,5 +1,8 @@
-<article>
+<article (click)="navigateToProfile()">
     <img [src]="'/avatars/' + avatar + '.jpg' || '/avatars/default.jpg'" alt="avatar">
-    <p>{{ username }}</p>
+    <div>
+        <p>{{ username }}</p>
+        <p class="bio">{{ bio }}</p>
+    </div>
     <button>Seguir</button>
 </article>
