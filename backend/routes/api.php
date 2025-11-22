@@ -41,6 +41,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Recommendations routes
     Route::get('/recommendations/users', [RecommendationsController::class, 'getSuggestedUsers']);
     Route::get('/recommendations/trending', [RecommendationsController::class, 'getTrendingTopics']);
+
+    // Notification routes
+    Route::get('/notifications', [App\Http\Controllers\Api\NotificationController::class, 'index']);
+    Route::post('/notifications/{id}/read', [App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
+    Route::post('/notifications/read-all', [App\Http\Controllers\Api\NotificationController::class, 'markAllAsRead']);
 });
 
 Route::post('/register', [AuthController::class, 'register']);
