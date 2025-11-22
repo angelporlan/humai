@@ -1,0 +1,29 @@
+<div class="notifications-container">
+    <div class="header">
+        <h2>Notificaciones</h2>
+        <button (click)="markAllAsRead()" class="mark-all-btn">Marcar todas como leídas</button>
+    </div>
+
+    <div *ngIf="!loading && notifications.length === 0" class="no-notifications">
+        No tienes notificaciones.
+    </div>
+
+    <ul class="notification-list">
+        <div class="notifications-container">
+
+
+            <div *ngIf="!loading && notifications.length === 0" class="no-notifications">
+                No tienes notificaciones.
+            </div>
+
+            <ul class="notification-list">
+                <li *ngFor="let notification of notifications">
+                    <app-notification-item [notification]="notification" (read)="markAsRead(notification)">
+                    </app-notification-item>
+                </li>
+            </ul>
+
+            <div *ngIf="loading" class="loading-container">
+                <app-notification-item-loader *ngFor="let i of [1,2,3,4,5]"></app-notification-item-loader>
+            </div>
+        </div>
