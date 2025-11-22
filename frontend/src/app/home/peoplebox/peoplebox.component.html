@@ -1,7 +1,9 @@
 <section>
     <h3>A quién seguir</h3>
     <div class="people">
-        <app-people-item *ngFor="let person of people" [avatar]="person.avatar" [username]="person.username"></app-people-item>
+        <app-people-item *ngFor="let person of people" [avatar]="person.avatar" [username]="person.username"
+            [name]="person.name" [bio]="person.bio" [followersCount]="person.followers_count"
+            [mutualFollowers]="person.mutual_followers" [isFollowing]="person.is_following"></app-people-item>
     </div>
     <span>Mostrar más</span>
 </section>
