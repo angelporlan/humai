@@ -127,6 +127,10 @@ p:first-of-type {
     border-bottom: 2px solid var(--color-tertiary);
 }
 
+.clickable-stat {
+    cursor: pointer;
+}
+
 @media (max-width: 600px) {
     section {
         padding: 12px;
