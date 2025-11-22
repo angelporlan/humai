@@ -1,0 +1,15 @@
+<div class="notification-item" [class.unread]="!notification.read" (click)="onClick()">
+    <div class="icon-container">
+        <div class="icon-circle" [ngClass]="notification.type">
+            <img [src]="getIcon()" alt="icon" onerror="this.src='icons/bell.svg'">
+        </div>
+    </div>
+    <div class="content-container">
+        <div class="header-row">
+            <span class="title">{{ notification.data.title }}</span>
+            <span class="time">{{ notification.created_at | date:'short' }}</span>
+        </div>
+        <p class="body">{{ notification.data.body }}</p>
+    </div>
+    <div *ngIf="!notification.read" class="unread-dot"></div>
+</div>
