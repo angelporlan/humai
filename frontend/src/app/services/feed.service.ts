@@ -78,7 +78,7 @@ export class FeedService {
       })
     });
   }
-  
+
   getCommentsOfAUser(username: string, url?: string): Observable<any> {
     const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
     if (url) {
@@ -119,6 +119,22 @@ export class FeedService {
     const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
     const username = JSON.parse(localStorage.getItem('humai') || '{}').username;
     return this.http.get(`${this.apiUrl}/getCommentsOfAPost?post_id=${postId}&username=${username}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
+
+  searchPosts(query: string, url?: string): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    if (url) {
+      return this.http.get(`${url}`, {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        })
+      });
+    }
+    return this.http.get(`${this.apiUrl}/search?q=${query}`, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`
       })
