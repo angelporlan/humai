@@ -1,0 +1,23 @@
+.feed-container {
+    padding-bottom: 60px;
+}
+
+.search-header {
+    padding-top: 30px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-header h2 {
+    font-weight: 700;
+    margin: 0;
+}
+
+.no-results {
+    padding: 32px;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.loading-more {
+    padding: 16px;
+}
