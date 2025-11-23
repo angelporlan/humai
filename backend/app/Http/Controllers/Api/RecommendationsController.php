@@ -85,7 +85,7 @@ class RecommendationsController extends Controller
     {
         $cacheKey = "trending_topics";
         
-        $trends = Cache::remember($cacheKey, 60 * 15, function () {
+        $trends = Cache::remember($cacheKey, now()->addSeconds(1), function () {
             $thirtyDaysAgo = now()->subDays(90);
             
             $trendingTags = Tag::select('tags.id', 'tags.name', 'tags.posts_count', 'tags.created_at', 'tags.updated_at')
@@ -96,12 +96,11 @@ class RecommendationsController extends Controller
                 ->where('posts.is_public', true)
                 ->groupBy('tags.id', 'tags.name', 'tags.posts_count', 'tags.created_at', 'tags.updated_at')
                 ->having('recent_posts_count', '>', 0)
-                ->orderByDesc('recent_posts_count')
-                ->limit(3)
                 ->get();
             
             return $trendingTags->map(function ($tag) {
-                $trendScore = $tag->recent_posts_count;
+                // $trendScore = ($tag->posts_count * .7) + ($tag->recent_posts_count * .3);
+                $trendScore = ($tag->posts_count * 1) + ($tag->recent_posts_count * 0);
                 
                 return [
                     'id' => $tag->id,
@@ -110,7 +109,10 @@ class RecommendationsController extends Controller
                     'recent_posts_count' => $tag->recent_posts_count,
                     'trend_score' => round($trendScore, 2)
                 ];
-            });
+            })->sortBy([
+                ['trend_score', 'desc'],
+                ['posts_count', 'desc']
+            ])->take(3)->values();
         });
         
         return response()->json([
