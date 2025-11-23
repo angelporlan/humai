@@ -197,4 +197,25 @@ class PostController extends Controller
 
         return PostResource::collection($comments);
     }
+
+    /**
+     * Buscar posts por tag
+     */
+    public function search(Request $request)
+    {
+        $user = $request->user();
+        $query = $request->get('q');
+        $perPage = $request->get('per_page', 10);
+
+        if (empty($query)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Query parameter is required'
+            ], 400);
+        }
+
+        $posts = $this->feedService->searchPostsByTag($user, $query, $perPage);
+
+        return PostResource::collection($posts);
+    }
 }
