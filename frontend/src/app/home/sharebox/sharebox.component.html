@@ -1,9 +1,15 @@
 <section>
     <img [src]="'/avatars/' + avatar + '.jpg'" alt="avatar">
     <div class="content">
-        <textarea #post [placeholder]="textDefault"></textarea>
+        <div #postDiv class="editable-input" contenteditable="true" [attr.placeholder]="textDefault"
+            (input)="onInput($event)" (keydown)="handleKeydown($event)">
+        </div>
+
         <div class="buttons">
-            <button (click)="handlePost(post.value)">Publicar</button>
+            <button class="btn-highlight" (click)="toggleHighlight()" title="Destacar palabra">
+                <b>B</b>
+            </button>
+            <button (click)="prepareAndPost()">Publicar</button>
         </div>
     </div>
 </section>
