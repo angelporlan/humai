@@ -3,6 +3,8 @@ section {
     padding: 12px 16px;
     border: 2px solid var(--color-secondary);
     border-radius: 16px;
+    background: transparent;
+    /* Aseguramos transparencia si es parte del tema */
 }
 
 img {
@@ -19,64 +21,120 @@ img {
     flex-direction: column;
 }
 
-textarea {
+/* --- Estilos del Input Editable (Antes Textarea) --- */
+.editable-input {
     width: 100%;
     min-height: 80px;
+    /* Heredado del textarea original */
     border: none;
-    resize: vertical;
     font-size: 20px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin-top: 10px;
     outline: none;
     color: white;
     background: transparent;
+
+    /* Propiedades necesarias para que el DIV se comporte como input */
+    white-space: pre-wrap;
+    /* Respeta saltos de línea */
+    word-break: break-word;
+    /* Evita desbordamiento horizontal */
+    cursor: text;
+    display: block;
 }
 
-textarea::placeholder {
+/* Simulación del Placeholder (color #536471 original) */
+.editable-input:empty:before {
+    content: attr(placeholder);
     color: #536471;
     font-weight: 400;
+    display: block;
+    /* Importante para renderizado correcto */
+    pointer-events: none;
+    /* Para que los clics pasen al input */
 }
 
+/* --- Botones --- */
 .buttons {
     display: flex;
     justify-content: flex-end;
+    /* Alinea todo a la derecha */
+    align-items: center;
+    /* Centra verticalmente los botones */
     padding-top: 12px;
+    gap: 10px;
+    /* Espacio entre el botón B y Publicar */
 }
 
+/* Estilo general de botones */
 button {
-    background-color: var(--color-tertiary);
-    color: white;
     border: none;
     border-radius: 9999px;
     padding: 8px 16px;
     font-weight: 700;
     font-size: 15px;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, background-color 0.2s;
+}
+
+/* Botón principal (Publicar) - Mantiene tu estilo original */
+button:not(.btn-highlight) {
+    background-color: var(--color-tertiary);
+    color: white;
 }
 
 button:enabled {
     opacity: 1;
-    cursor: pointer;
 }
 
 button:enabled:hover {
     opacity: 0.8;
 }
 
-/* Add some responsive adjustments */
+/* Botón de destacar (La 'B') - Estilo nuevo para diferenciarlo */
+.btn-highlight {
+    background-color: transparent;
+    /* Fondo transparente para no ser agresivo */
+    color: var(--color-tertiary);
+    /* Usa tu color terciario para el texto */
+    border: 2px solid var(--color-secondary);
+    /* Borde sutil */
+    width: 36px;
+    /* Hacemos que sea redondo/cuadrado */
+    height: 36px;
+    padding: 0;
+    /* Reseteamos padding para centrar la letra */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: serif;
+    /* Fuente serif para que la 'B' se vea más clásica */
+    font-size: 18px;
+}
+
+.btn-highlight:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Leve brillo al pasar el mouse */
+}
+
+/* --- Responsive --- */
 @media (max-width: 500px) {
     img {
         width: 40px;
         height: 40px;
     }
-    
-    textarea {
+
+    .editable-input {
         font-size: 18px;
     }
-    
+
     button {
         padding: 6px 14px;
         font-size: 14px;
+    }
+
+    .btn-highlight {
+        width: 32px;
+        height: 32px;
     }
 }
