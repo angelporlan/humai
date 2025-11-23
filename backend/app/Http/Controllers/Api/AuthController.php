@@ -69,7 +69,7 @@ class AuthController extends Controller
 
         $cacheKey = "user_info_{$validated['username']}_requester_" . ($request->user() ? $request->user()->id : 'guest');
 
-        $userData = Cache::remember($cacheKey, 60 * 5, function () use ($validated, $request) {
+        $userData = Cache::remember($cacheKey, now()->addSeconds(1), function () use ($validated, $request) {
             $user = User::where('username', $validated['username'])
                 ->withCount(['followers', 'following', 'posts'])
                 ->first();
@@ -160,7 +160,7 @@ class AuthController extends Controller
     {
         $cacheKey = "user_followers_{$username}_requester_" . ($request->user() ? $request->user()->id : 'guest');
 
-        $followers = Cache::remember($cacheKey, 60 * 5, function () use ($username, $request) {
+        $followers = Cache::remember($cacheKey, now()->addSeconds(1), function () use ($username, $request) {
             $user = User::where('username', $username)->first();
 
             if (!$user) {
@@ -188,7 +188,7 @@ class AuthController extends Controller
     {
         $cacheKey = "user_following_{$username}_requester_" . ($request->user() ? $request->user()->id : 'guest');
 
-        $following = Cache::remember($cacheKey, 60 * 5, function () use ($username, $request) {
+        $following = Cache::remember($cacheKey, now()->addSeconds(1), function () use ($username, $request) {
             $user = User::where('username', $username)->first();
 
             if (!$user) {
