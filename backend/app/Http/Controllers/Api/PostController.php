@@ -28,7 +28,9 @@ class PostController extends Controller
             'content' => 'required|string|max:5000',
             'is_public' => 'boolean',
             'meta' => 'nullable|array',
-            'parent_post' => 'nullable|exists:posts,id'
+            'parent_post' => 'nullable|exists:posts,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'string|max:50'
         ]);
 
         $user = $request->user();
@@ -51,7 +53,7 @@ class PostController extends Controller
 
         $cacheKey = "feed_user_{$user->id}_page_{$page}_per_page_{$perPage}";
 
-        $posts = Cache::remember($cacheKey, 60 * 5, function () use ($user, $perPage) {
+        $posts = Cache::remember($cacheKey, now()->addSeconds(1), function () use ($user, $perPage) {
             return $this->feedService->getFeed($user, $perPage);
         });
 
@@ -85,7 +87,7 @@ class PostController extends Controller
         
         $cacheKey = "user_posts_{$username}_by_{$requestingUser->id}_page_{$page}_per_page_{$perPage}";
 
-        $posts = Cache::remember($cacheKey, 60 * 5, function () use ($requestingUser, $username, $perPage) {
+        $posts = Cache::remember($cacheKey, now()->addSeconds(1), function () use ($requestingUser, $username, $perPage) {
             return $this->feedService->getPostsByUser($requestingUser, $username, $perPage);
         });
         
