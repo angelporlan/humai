@@ -7,16 +7,25 @@ import { Observable } from 'rxjs';
 })
 export class RecommendService {
 
-    private apiUrl = 'http://127.0.0.1:8000/api';
-  
-    constructor(private http: HttpClient) { }
-  
-    getUserRecommendation(): Observable<any> {
-      const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
-      return this.http.get(`${this.apiUrl}/recommendations/users`, {
-        headers: new HttpHeaders({
-          'Authorization': `Bearer ${token}`
-        })
-      });
-    }
+  private apiUrl = 'http://127.0.0.1:8000/api';
+
+  constructor(private http: HttpClient) { }
+
+  getUserRecommendation(): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    return this.http.get(`${this.apiUrl}/recommendations/users`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
+
+  getTrendingRecommendation(): Observable<any> {
+    const token = JSON.parse(localStorage.getItem('humai') || '{}').token;
+    return this.http.get(`${this.apiUrl}/recommendations/trending`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
+  }
 }
