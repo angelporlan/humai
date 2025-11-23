@@ -118,23 +118,27 @@ export class FeedItemComponent {
 
     }
 
-//       postPost(content: string) {
-//     if (!content) return;
+    //       postPost(content: string) {
+    //     if (!content) return;
 
-//     this.feedService.postPost({
-//       content: content,
-//       is_public: true,
-//       meta: null
-//     }).subscribe({
-//       next: (response) => {
-//         console.log('Post creado exitosamente', response);
-//         const textarea = document.querySelector('textarea');
-//         if (textarea) textarea.value = '';
-//         this.newPost.emit(response.post);
-//       },
-//       error: (error) => {
-//         console.error('Error al crear el post', error);
-//       }
-//     });
-//   }
+    //     this.feedService.postPost({
+    //       content: content,
+    //       is_public: true,
+    //       meta: null
+    //     }).subscribe({
+    //       next: (response) => {
+    //         console.log('Post creado exitosamente', response);
+    //         const textarea = document.querySelector('textarea');
+    //         if (textarea) textarea.value = '';
+    //         this.newPost.emit(response.post);
+    //       },
+    //       error: (error) => {
+    //         console.error('Error al crear el post', error);
+    //       }
+    //     });
+    //   }
+    formatContent(content: string): string {
+        if (!content) return '';
+        return content.replace(/#([\wñÑáéíóúÁÉÍÓÚ]+)/g, '<b>$1</b>');
+    }
 }
