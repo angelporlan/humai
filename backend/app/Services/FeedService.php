@@ -351,4 +351,20 @@ class FeedService
 
         return $posts;
     }
+
+    /**
+     * Search posts by tag name
+     */
+    public function searchPostsByTag(User $user, string $query, int $perPage = 10)
+    {
+        $posts = Post::whereHas('tags', function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })
+            ->with(['user', 'comments', 'reactions', 'tags'])
+            ->where('parent_post', null)
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+
+        return $this->addUserReactionInfo($posts, $user->id);
+    }
 }
