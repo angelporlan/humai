@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Reaction;
 use App\Models\Comment;
+use App\Models\Tag;
 
 class FeedService
 {
@@ -100,6 +101,19 @@ class FeedService
                 Post::where('id', $data['parent_post'])->increment('comments_count');
             }
 
+            if (!empty($data['tags'])) {
+                $tagIds = [];
+                foreach (array_unique($data['tags']) as $tagName) {
+                    $tag = Tag::firstOrCreate(
+                        ['name' => $tagName],
+                        ['posts_count' => 0]
+                    );
+                    $tag->increment('posts_count');
+                    $tagIds[] = $tag->id;
+                }
+                $post->tags()->attach($tagIds);
+            }
+
             $post->load('user:id,username,avatar');
 
             $post->comments_count = 0;
@@ -107,7 +121,7 @@ class FeedService
 
             return [
                 'success' => true,
-                'message' => $data['parent_post'] ? 'Comment created successfully' : 'Post created successfully',
+                'message' => !empty($data['parent_post']) ? 'Comment created successfully' : 'Post created successfully',
                 'post' => $post
             ];
         } catch (\Exception $e) {
