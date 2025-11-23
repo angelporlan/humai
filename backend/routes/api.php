@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/feed', [PostController::class, 'feed']);
     Route::get('/explore', [PostController::class, 'explore']);
+    Route::get('/search', [PostController::class, 'search']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/getInfoOfAUsername', [AuthController::class, 'getInfoOfAUsername']);
