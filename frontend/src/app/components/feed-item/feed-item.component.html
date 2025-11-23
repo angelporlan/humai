@@ -10,7 +10,7 @@
     </div>
 
     <div class="post-content">
-        <p>{{ content }}</p>
+        <p [innerHTML]="formatContent(content)"></p>
     </div>
 
     <div class="post-tags" *ngIf="tags?.length">
