@@ -11,6 +11,7 @@ interface ReactionType {
 
 @Component({
     selector: 'app-feed-item',
+    standalone: true,
     imports: [CommonModule, FormsModule],
     templateUrl: './feed-item.component.html',
     styleUrl: './feed-item.component.css'
