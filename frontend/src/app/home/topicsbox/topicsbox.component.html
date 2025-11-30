@@ -1,9 +1,10 @@
 <section>
     <h3>Tendencias para tí</h3>
     <div class="topics" *ngIf="!loading">
-        <app-topic-item *ngFor="let topic of topics" [topic]="topic.name" [postNumber]="topic.count">
+        <app-topic-item *ngFor="let topic of topics" [topic]="topic.name" [postNumber]="topic.posts_count">
         </app-topic-item>
     </div>
     <div *ngIf="loading">Cargando...</div>
     <div *ngIf="!loading && topics.length === 0">No hay tendencias disponibles.</div>
+    <span>Ver más</span>
 </section>
