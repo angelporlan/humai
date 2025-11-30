@@ -30,6 +30,7 @@ export class TopicsboxComponent implements OnInit {
           this.topics = Object.values(data);
         }
         this.loading = false;
+        console.log(this.topics);
       },
       error: (err) => {
         console.error('Error fetching trending topics:', err);
