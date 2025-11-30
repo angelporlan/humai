@@ -2,16 +2,16 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
+    padding-left: 0;
 }
 
 .settings-header {
     margin-bottom: 30px;
 }
 
-.settings-header h1 {
+.settings-header h2 {
     color: var(--color-quaternary);
-    font-size: 28px;
-    font-weight: 700;
+    padding-top: 10px;
 }
 
 .settings-content {
