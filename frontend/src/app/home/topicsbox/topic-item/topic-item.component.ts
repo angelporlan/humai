@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-topic-item',
+  standalone: true,
   imports: [],
   templateUrl: './topic-item.component.html',
   styleUrl: './topic-item.component.css'
@@ -9,6 +11,11 @@ import { Component, Input } from '@angular/core';
 export class TopicItemComponent {
 
   @Input() topic: string = '';
-  @Input() postNumber: GLfloat = 1.1;
+  @Input() postNumber: number = 0;
 
+  constructor(private router: Router) { }
+
+  onTopicClick() {
+    this.router.navigate(['/search'], { queryParams: { q: this.topic } });
+  }
 }
