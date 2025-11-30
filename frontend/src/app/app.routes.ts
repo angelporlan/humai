@@ -72,4 +72,8 @@ export const routes: Routes = [
         path: 'auth',
         loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
     },
+    {
+        path: 'landing',
+        loadComponent: () => import('./landing/landing.component').then(m => m.LandingPageComponent)
+    },
 ];
