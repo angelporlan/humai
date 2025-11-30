@@ -7,6 +7,10 @@ export const routes: Routes = [
         component: LayoutComponent,
         children: [
             {
+                path: 'search',
+                loadComponent: () => import('./search-results/search-results.component').then(m => m.SearchResultsComponent)
+            },
+            {
                 path: '',
                 redirectTo: 'home',
                 pathMatch: 'full'
