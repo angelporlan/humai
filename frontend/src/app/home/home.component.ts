@@ -9,6 +9,7 @@ import { ShareboxComponent } from './sharebox/sharebox.component';
 
 @Component({
     selector: 'app-home',
+    standalone: true,
     imports: [FeedItemComponent, FeedItemLoaderComponent, NgFor, ShareboxComponent, NgIf],
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
@@ -71,7 +72,7 @@ export class HomeComponent {
 
     handleNewPost(post: any) {
         const userData = JSON.parse(localStorage.getItem('humai') || '{}');
-        
+
         const normalizedPost = {
             ...post,
             comments_count: post.comments_count || 0,
