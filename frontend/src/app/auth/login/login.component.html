@@ -5,6 +5,10 @@
             <p class="subtitle">Bienvenido de nuevo</p>
         </div>
 
+        <div *ngIf="errorMessage" class="error-alert">
+            {{ errorMessage }}
+        </div>
+
         <form (ngSubmit)="login()" class="auth-form">
             <div class="input-group">
                 <label for="email">Email</label>
