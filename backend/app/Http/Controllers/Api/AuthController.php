@@ -23,6 +23,9 @@ class AuthController extends Controller
             'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'name' => $validated['username'],
+            'bio' => "Hey there! I'm using Humai",
+            'avatar' => '1',
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
