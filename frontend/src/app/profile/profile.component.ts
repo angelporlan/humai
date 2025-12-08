@@ -133,4 +133,8 @@ export class ProfileComponent implements OnInit {
     this.activeTab = tab;
     this.router.navigate(['/profile', this.username, tab]);
   }
+
+  editProfile() {
+    this.router.navigate(['/settings']);
+  }
 }
