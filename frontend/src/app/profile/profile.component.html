@@ -25,7 +25,9 @@
                     </div>
                 </div>
 
-                <button *ngIf="!loading && isOwnProfile" class="edit-profile-button" (click)="editProfile()">Editar Perfil</button>
+                <button *ngIf="!loading && isOwnProfile" class="edit-profile-button" (click)="editProfile()">Editar
+                    Perfil</button>
+                <button *ngIf="!loading && isOwnProfile" class="logout-button" (click)="logout()">Cerrar Sesión</button>
                 <button *ngIf="!loading && !isOwnProfile && !isFollowing" class="follow-button"
                     (click)="followUser()">Seguir</button>
                 <button *ngIf="!loading && !isOwnProfile && isFollowing" class="unfollow-button"
