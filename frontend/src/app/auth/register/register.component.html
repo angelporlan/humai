@@ -5,6 +5,10 @@
             <p class="subtitle">Crea tu cuenta gratis</p>
         </div>
 
+        <div *ngIf="errorMessage" class="error-alert">
+            {{ errorMessage }}
+        </div>
+
         <form (ngSubmit)="register()" class="auth-form">
             <div class="input-group">
                 <label for="username">Nombre de usuario</label>
