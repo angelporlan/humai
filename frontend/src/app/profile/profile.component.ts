@@ -137,4 +137,19 @@ export class ProfileComponent implements OnInit {
   editProfile() {
     this.router.navigate(['/settings']);
   }
+
+  logout() {
+    this.authService.logout().subscribe({
+      next: () => {
+        localStorage.removeItem('humai');
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Logout failed', err);
+        // Force logout on error
+        localStorage.removeItem('humai');
+        this.router.navigate(['/login']);
+      }
+    });
+  }
 }
