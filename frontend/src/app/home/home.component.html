@@ -1,12 +1,46 @@
-<h2>Inicio</h2>
-<app-sharebox (newPost)="handleNewPost($event)"></app-sharebox>
-<div *ngIf="firstLoad">
-    <app-feed-item-loader></app-feed-item-loader>
-    <app-feed-item-loader></app-feed-item-loader>
-    <app-feed-item-loader></app-feed-item-loader>
+<div class="home-header">
+    <h2>Inicio</h2>
+
+    <div class="feed-tabs">
+        <button [class.active]="currentMode === 'foryou'" (click)="switchMode('foryou')">
+            Para ti
+        </button>
+        <button [class.active]="currentMode === 'following'" (click)="switchMode('following')">
+            Siguiendo
+        </button>
+    </div>
 </div>
-<div *ngIf="!firstLoad">
-    <app-feed-item *ngFor="let post of feed" [userAvatar]="post.user.avatar" [username]="post.user.username"
-    [content]="post.content" [date]="post.created_at" [likes]="post.likes_count" [comments]="post.comments_count"
-    [tags]="post.tags" [postId]="post.id" [userHasReacted]="post.user_has_reacted" [userReactionType]="post.user_reaction_type" />
+
+<app-sharebox (newPost)="handleNewPost($event)"></app-sharebox>
+
+<div *ngIf="currentMode === 'foryou'">
+    <div *ngIf="firstLoadForYou">
+        <app-feed-item-loader></app-feed-item-loader>
+        <app-feed-item-loader></app-feed-item-loader>
+        <app-feed-item-loader></app-feed-item-loader>
+    </div>
+    <div *ngIf="!firstLoadForYou">
+        <app-feed-item *ngFor="let post of forYouFeed" [userAvatar]="post.user.avatar" [username]="post.user.username"
+            [content]="post.content" [date]="post.created_at" [likes]="post.likes_count"
+            [comments]="post.comments_count" [tags]="post.tags" [postId]="post.id"
+            [userHasReacted]="post.user_has_reacted" [userReactionType]="post.user_reaction_type" />
+    </div>
+</div>
+
+<div *ngIf="currentMode === 'following'">
+    <div *ngIf="firstLoadFollowing">
+        <app-feed-item-loader></app-feed-item-loader>
+        <app-feed-item-loader></app-feed-item-loader>
+        <app-feed-item-loader></app-feed-item-loader>
+    </div>
+    <div *ngIf="!firstLoadFollowing">
+        <app-feed-item *ngFor="let post of followingFeed" [userAvatar]="post.user.avatar"
+            [username]="post.user.username" [content]="post.content" [date]="post.created_at" [likes]="post.likes_count"
+            [comments]="post.comments_count" [tags]="post.tags" [postId]="post.id"
+            [userHasReacted]="post.user_has_reacted" [userReactionType]="post.user_reaction_type" />
+
+        <div *ngIf="followingFeed.length === 0" class="empty-state">
+            <p>No hay publicaciones aún. ¡Sigue a alguien para ver su contenido!</p>
+        </div>
+    </div>
 </div>
