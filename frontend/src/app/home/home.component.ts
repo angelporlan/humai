@@ -15,10 +15,17 @@ import { ShareboxComponent } from './sharebox/sharebox.component';
     styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-    feed: any[] = [];
-    nextPageUrl: string | null = null;
+    followingFeed: any[] = [];
+    forYouFeed: any[] = [];
+
+    currentMode: 'foryou' | 'following' = 'foryou';
+
+    nextPageUrlFollowing: string | null = null;
+    nextPageUrlForYou: string | null = null;
+
     loading = false;
-    firstLoad = true;
+    firstLoadFollowing = true;
+    firstLoadForYou = true;
 
     constructor(
         private authService: AuthService,
@@ -27,7 +34,16 @@ export class HomeComponent {
     ) { }
 
     ngOnInit() {
-        this.getFeed();
+        this.getForYouFeed();
+    }
+
+    switchMode(mode: 'foryou' | 'following') {
+        this.currentMode = mode;
+        if (mode === 'following' && this.firstLoadFollowing) {
+            this.getFollowingFeed();
+        } else if (mode === 'foryou' && this.firstLoadForYou) {
+            this.getForYouFeed();
+        }
     }
 
     logout() {
@@ -40,22 +56,42 @@ export class HomeComponent {
         });
     }
 
-    getFeed(url?: string) {
+    getFollowingFeed(url?: string) {
         if (this.loading) return;
         this.loading = true;
 
         this.feedService.getFeed(url).subscribe({
             next: (res) => {
-                console.log(res);
                 const newItems = Array.isArray(res.data) ? res.data : [res.data];
-                this.feed = [...this.feed, ...newItems];
-                this.nextPageUrl = res.links?.next || null;
+                this.followingFeed = [...this.followingFeed, ...newItems];
+                this.nextPageUrlFollowing = res.links?.next || null;
                 this.loading = false;
-                this.firstLoad = false;
+                this.firstLoadFollowing = false;
             },
             error: (err) => {
                 console.error(err);
                 this.loading = false;
+                this.firstLoadFollowing = false;
+            }
+        });
+    }
+
+    getForYouFeed(url?: string) {
+        if (this.loading) return;
+        this.loading = true;
+
+        this.feedService.getExploreFeed(url).subscribe({
+            next: (res) => {
+                const newItems = Array.isArray(res.data) ? res.data : [res.data];
+                this.forYouFeed = [...this.forYouFeed, ...newItems];
+                this.nextPageUrlForYou = res.links?.next || null;
+                this.loading = false;
+                this.firstLoadForYou = false;
+            },
+            error: (err) => {
+                console.error(err);
+                this.loading = false;
+                this.firstLoadForYou = false;
             }
         });
     }
@@ -65,8 +101,12 @@ export class HomeComponent {
         const bottomReached =
             window.innerHeight + window.scrollY >= document.body.offsetHeight - 200;
 
-        if (bottomReached && this.nextPageUrl && !this.loading) {
-            this.getFeed(this.nextPageUrl);
+        if (bottomReached && !this.loading) {
+            if (this.currentMode === 'following' && this.nextPageUrlFollowing) {
+                this.getFollowingFeed(this.nextPageUrlFollowing);
+            } else if (this.currentMode === 'foryou' && this.nextPageUrlForYou) {
+                this.getForYouFeed(this.nextPageUrlForYou);
+            }
         }
     }
 
@@ -86,6 +126,6 @@ export class HomeComponent {
             created_at: post.created_at || new Date().toISOString()
         };
 
-        this.feed.unshift(normalizedPost);
+        this.followingFeed.unshift(normalizedPost);
     }
 }
