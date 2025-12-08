@@ -142,13 +142,12 @@ export class ProfileComponent implements OnInit {
     this.authService.logout().subscribe({
       next: () => {
         localStorage.removeItem('humai');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       },
       error: (err) => {
         console.error('Logout failed', err);
-        // Force logout on error
         localStorage.removeItem('humai');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
       }
     });
   }
