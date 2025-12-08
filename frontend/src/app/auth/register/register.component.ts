@@ -24,7 +24,7 @@ export class RegisterComponent {
                 const dataRes = {
                     token: res.token,
                     username: res.user.username,
-                    avatar: 'default'
+                    avatar: '1'
                 }
                 localStorage.setItem('humai', JSON.stringify(dataRes));
                 this.router.navigate(['/home']);
