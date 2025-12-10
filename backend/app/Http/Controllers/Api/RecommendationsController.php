@@ -22,50 +22,48 @@ class RecommendationsController extends Controller
      */
     public function getSuggestedUsers(Request $request)
     {
-        $user = $request->user();
+        $currentUser = $request->user();
         
-        $cacheKey = "user_suggestions_{$user->id}";
+        // $cacheKey = "user_suggestions_{$currentUser->id}";
         
-        $suggestions = Cache::remember($cacheKey, 60 * 30, function () use ($user) {
-            $followingIds = $user->following()->pluck('users.id')->toArray();
-            $followingIds[] = $user->id;
-            
-            $suggestedUsers = User::select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')
-                ->selectRaw('COUNT(DISTINCT follows.follower_id) as mutual_followers')
-                ->join('follows', 'users.id', '=', 'follows.followee_id')
-                ->whereIn('follows.follower_id', $followingIds)
-                ->whereNotIn('users.id', $followingIds)
-                ->groupBy('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')
+        $followingIds = $currentUser->following()->pluck('users.id')->toArray();
+        $followingIds[] = $currentUser->id;
+        
+        $suggestedUsers = User::select('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')
+            ->selectRaw('COUNT(DISTINCT follows.follower_id) as mutual_followers')
+            ->join('follows', 'users.id', '=', 'follows.followee_id')
+            ->whereIn('follows.follower_id', $followingIds)
+            ->whereNotIn('users.id', $followingIds)
+            ->groupBy('users.id', 'users.username', 'users.name', 'users.avatar', 'users.bio')
+            ->withCount('followers')
+            ->orderByDesc('mutual_followers')
+            ->orderByDesc('followers_count')
+            ->limit(3)
+            ->get();
+        
+        if ($suggestedUsers->count() < 3) {
+            $limit = 3 - $suggestedUsers->count();
+            $popularUsers = User::whereNotIn('id', $followingIds)
+                ->whereNotIn('id', $suggestedUsers->pluck('id'))
                 ->withCount('followers')
-                ->orderByDesc('mutual_followers')
                 ->orderByDesc('followers_count')
-                ->limit(3)
-                ->get();
+                ->limit($limit)
+                ->get(['id', 'username', 'name', 'avatar', 'bio']);
             
-            if ($suggestedUsers->count() < 3) {
-                $limit = 3 - $suggestedUsers->count();
-                $popularUsers = User::whereNotIn('id', $followingIds)
-                    ->whereNotIn('id', $suggestedUsers->pluck('id'))
-                    ->withCount('followers')
-                    ->orderByDesc('followers_count')
-                    ->limit($limit)
-                    ->get(['id', 'username', 'name', 'avatar', 'bio']);
-                
-                $suggestedUsers = $suggestedUsers->concat($popularUsers);
-            }
-            
-            return $suggestedUsers->map(function ($user) {
-                return [
-                    'id' => $user->id,
-                    'username' => $user->username,
-                    'name' => $user->name,
-                    'avatar' => $user->avatar,
-                    'bio' => $user->bio,
-                    'followers_count' => $user->followers_count ?? 0,
-                    'mutual_followers' => $user->mutual_followers ?? 0,
-                    'is_following' => $user->isFollowing($user)
-                ];
-            });
+            $suggestedUsers = $suggestedUsers->concat($popularUsers);
+        }
+        
+        $suggestions = $suggestedUsers->map(function ($user) use ($currentUser) {
+            return [
+                'id' => $user->id,
+                'username' => $user->username,
+                'name' => $user->name,
+                'avatar' => $user->avatar,
+                'bio' => $user->bio,
+                'followers_count' => $user->followers_count ?? 0,
+                'mutual_followers' => $user->mutual_followers ?? 0,
+                'is_following' =>  $currentUser->isFollowing($user)
+            ];
         });
         
         return response()->json([
