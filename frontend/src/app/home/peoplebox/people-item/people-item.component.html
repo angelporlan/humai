@@ -4,5 +4,5 @@
         <p>{{ username }}</p>
         <p class="bio">{{ bio }}</p>
     </div>
-    <button>Seguir</button>
+    <button (click)="toggleFollow($event)">{{ isFollowing ? 'Siguiendo' : 'Seguir' }}</button>
 </article>

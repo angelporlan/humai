@@ -1,6 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ProfileService } from '../../../services/profile.service';
 
 @Component({
   selector: 'app-people-item',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class PeopleItemComponent {
   private router = inject(Router);
+  private profileService = inject(ProfileService);
 
   @Input() avatar: string = 'default.jpg';
   @Input() username: string = '';
@@ -22,6 +24,28 @@ export class PeopleItemComponent {
 
   navigateToProfile(): void {
     this.router.navigate(['/profile', this.username]);
+  }
+
+  toggleFollow(event: Event): void {
+    event.stopPropagation();
+
+    if (this.isFollowing) {
+      this.profileService.unfollowUser(this.username).subscribe({
+        next: () => {
+          this.isFollowing = false;
+          this.followersCount--;
+        },
+        error: (err: any) => console.error('Error unfollowing user:', err)
+      });
+    } else {
+      this.profileService.followUser(this.username).subscribe({
+        next: () => {
+          this.isFollowing = true;
+          this.followersCount++;
+        },
+        error: (err: any) => console.error('Error following user:', err)
+      });
+    }
   }
 
 }
