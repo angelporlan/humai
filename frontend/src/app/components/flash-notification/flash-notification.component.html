@@ -1,0 +1,9 @@
+<div class="flash-container">
+    <div *ngFor="let notification of notifications" class="flash-notification flash-{{ notification.type }}" [@slideIn]>
+        <div class="flash-icon">{{ getIcon(notification.type) }}</div>
+        <div class="flash-message">{{ notification.message }}</div>
+        <button class="flash-close" (click)="close(notification.id)" aria-label="Cerrar">
+            ×
+        </button>
+    </div>
+</div>
